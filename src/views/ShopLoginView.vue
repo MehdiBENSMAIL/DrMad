@@ -20,10 +20,10 @@ export default {
     password:'',
   }),
   computed: {
-    ...mapState(['shopUser'])
+    ...mapState('shop', ['shopUser'])
   },
   methods: {
-    ...mapActions(['shopLogin']),
+    ...mapActions('shop', ['shopLogin']),
   }
 }
 </script>
