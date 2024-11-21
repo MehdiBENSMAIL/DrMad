@@ -6,8 +6,8 @@ import bank from './bank'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  modules: {
-    shop,
-    bank
-  }
+    modules: {
+        shop,
+        bank
+    }
 })
