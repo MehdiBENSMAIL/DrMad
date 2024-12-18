@@ -1,3 +1,4 @@
+import router from '@/router';
 import ShopService from '../services/shop.service'
 
 export default {
@@ -15,17 +16,19 @@ export default {
         },
     },
     actions: {
-        async shopLogin({commit}, data) {
+        async shopLogin({ commit }, data) {
             console.log('login');
             let response = await ShopService.shopLogin(data)
             if (response.error === 0) {
                 commit('updateShopUser', response.data)
+                router.push(response.redirect)
             }
             else {
                 console.log(response.data)
             }
+            return response;
         },
-        async getAllViruses({commit}) {
+        async getAllViruses({ commit }) {
             console.log('récupération des viruses');
             let response = await ShopService.getAllViruses()
             if (response.error === 0) {

@@ -1,6 +1,7 @@
 import { items, shopusers, bankaccounts, transactions } from "./data";
 import { v4 as uuidv4 } from "uuid";
 import { compareSync } from "bcryptjs";
+// import { checkAndFinalizeOrder } from '../order.service';
 
 function shopLogin(data) {
   // Vérifier si le login et le mot de passe sont fournis
@@ -79,6 +80,8 @@ function getAccountTransactions(number) {
   let trans = transactions.filter((t) => t.account === account._id);
   return { error: 0, status: 200, data: trans };
 }
+
+//function 
 
 export default {
   shopLogin,
