@@ -33,7 +33,6 @@ function shopLogin(data) {
     session: user.session
   };
 
-  console.log("HELLO")
   return { error: 0, status: 200, data: u, redirect: '/shop/buy' };
 }
 
@@ -57,9 +56,24 @@ function getAccountTransactions(number) {
   return { error: 0, status: 200, data: trans };
 }
 
+
+// FIXME : à tester
+function setUserBasket(userId, basket) {
+  let user = shopusers.find(e => e._id === userId);
+  user.basket = basket;
+}
+
+// FIXME : à tester
+function getUserBasket(userId) {
+  let user = shopusers.find(e => e._id === userId);
+  return user.basket;
+}
+
 export default {
   shopLogin,
   getAllViruses,
   getAccountAmount,
   getAccountTransactions,
+  setUserBasket,
+  getUserBasket,
 }

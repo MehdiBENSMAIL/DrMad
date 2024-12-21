@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <h1>Les virus</h1>
@@ -49,14 +50,15 @@
 
     <!-- version avec filtre multi-critères -->
     <CheckedList :data="filterViruses"
+                 :item-amount="true"
                  :fields="['name', 'price']"
                  item-check
-                 :item-button="{show: true, text:'Info'}"
-                 :list-button="{show: true, text:'Select'}"
+                 :item-button="{show: true, text:'Add to cart'}"
+                 :list-button="{show: true, text:'Add to cart'}"
                  :checked="checked"
                  @checked-changed="changeSelection($event)"
-                 @item-button-clicked="showVirusInfos($event)"
-                 @list-button-clicked="showVirusNames()"
+                 @item-button-clicked="addItemsToCard($event)"
+                 @list-button-clicked="addListItemsToCard($event)"
     >
 
     </CheckedList>
@@ -68,6 +70,7 @@
 import {mapState, mapActions} from 'vuex'
 import CheckedList from "@/components/CheckedList";
 export default {
+  // TODO : Add promotions
   name: 'VirusesView',
   components: {CheckedList},
   data: () => ({
@@ -149,10 +152,28 @@ export default {
         this.selected.push(i)
       }
     },
-    showVirusInfos(idx) {
-      let v = this.filterViruses[idx]
-      let msg = v.name+ ", stock = "+v.stock+", for sell = "+v.sold
-      alert(msg)
+    addItemsToCard(item) {
+      // TODO : rewrite this function (and rename it)
+      let v = this.filterViruses[item[0]];
+      let q = item[1];
+
+
+    },
+    addListItemsToCard(items) {
+      // TODO : rewrite this function (and rename it)
+      items.forEach(item => {
+        let v;
+        let q;
+        if(this.itemAmount) {
+          v = this.filterViruses[item[0]];
+          q = item[1];
+        } else {
+          v = this.filterViruses[item];
+          q = "default";
+        }
+      })
+      // clear selection
+      this.selected = [];
     },
     showVirusNames() {
       let msg = ""
