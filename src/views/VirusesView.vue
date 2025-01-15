@@ -57,8 +57,8 @@
                  :list-button="{show: true, text:'Add to cart'}"
                  :checked="checked"
                  @checked-changed="changeSelection($event)"
-                 @item-button-clicked="addItemsToCard($event)"
-                 @list-button-clicked="addListItemsToCard($event)"
+                 @item-button-clicked="addItemsToCard()"
+                 @list-button-clicked="addListItemsToCard()"
     >
 
     </CheckedList>
@@ -152,26 +152,24 @@ export default {
         this.selected.push(i)
       }
     },
-    addItemsToCard(item) {
+    addItemsToCard() {
       // TODO : rewrite this function (and rename it)
-      let v = this.filterViruses[item[0]];
-      let q = item[1];
-
-
+      // let v = this.filterViruses[item[0]];
+      // let q = item[1];
     },
-    addListItemsToCard(items) {
+    addListItemsToCard() {
       // TODO : rewrite this function (and rename it)
-      items.forEach(item => {
-        let v;
-        let q;
-        if(this.itemAmount) {
-          v = this.filterViruses[item[0]];
-          q = item[1];
-        } else {
-          v = this.filterViruses[item];
-          q = "default";
-        }
-      })
+      // items.forEach(item => {
+      //   let v;
+      //   let q;
+      //   if(this.itemAmount) {
+      //     v = this.filterViruses[item[0]];
+      //     q = item[1];
+      //   } else {
+      //     v = this.filterViruses[item];
+      //     q = "default";
+      //   }
+      // })
       // clear selection
       this.selected = [];
     },

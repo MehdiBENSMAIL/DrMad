@@ -4,7 +4,7 @@
 
     <span>login</span><input v-model="login">
     <span>password</span><input v-model="password">
-    <button @click="shopLogin({login, password})">Login</button>
+    <button @click="shopLoginData({login, password});">Login</button>
     <p v-if="shopUser">{{shopUser}}</p>
   </div>
 
@@ -23,7 +23,11 @@ export default {
     ...mapState('shop', ['shopUser'])
   },
   methods: {
-    ...mapActions('shop', ['shopLogin']),
+    ...mapActions('shop', ['shopLogin', 'setBasket']),
+    async shopLoginData(login, password) {
+      await this.shopLogin(login, password);
+      await this.setBasket();
+    }
   }
 }
 </script>

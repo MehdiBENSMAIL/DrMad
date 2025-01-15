@@ -22,31 +22,6 @@
     </table>
     <hr />
 
-    <!-- version avec liste séparée : décommenter pour tester
-
-    <p>Liste filtrée par prix</p>
-    <ul>
-      <li v-for="(virus, index) in filterVirusesByPrice" :key="index">{{virus.name}} : {{virus.price}}</li>
-    </ul>
-    <hr />
-    <p>Liste filtrée par nom</p>
-    <ul>
-      <li v-for="(virus, index) in filterVirusesByName" :key="index">{{virus.name}} : {{virus.price}}</li>
-    </ul>
-    <hr />
-    <p>Liste filtrée par stock</p>
-    <table>
-      <tr>
-        <th>Nom</th><th>Prix</th>
-      </tr>
-      <tr v-for="(virus, index) in filterVirusesByStock" :key="index">
-        <td>{{virus.name}}</td>
-        <td>{{virus.price}}</td>
-      </tr>
-    </table>
-
-    -->
-
     <!-- version avec filtre multi-critères -->
     <CheckedList :data="filterViruses"
                  :item-amount="itemAmount"
@@ -136,7 +111,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('shop', ['getAllViruses']),
+    ...mapActions('shop', ['getAllViruses' , 'setBasket', 'addItemBasket', 'removeItemBasket', 'clearBasket']),
     changeSelection(idx) {
       // get the virus in the filtered list
       let v = this.filterViruses[idx]
@@ -159,11 +134,13 @@ export default {
         q = item[1];
       } else {
         v = this.filterViruses[item];
-        q = "default";
+        q = 1;
       }
 
       let msg = v.name+ ", quantity = "+q+", stock = "+v.stock+", for sell = "+v.sold
       alert(msg)
+
+      this.addItemBasket({item: v._id, amount: q})
     },
     showVirusSelectedAndClearSelection(items) {
       let msg = "";
@@ -175,10 +152,11 @@ export default {
           q = item[1];
         } else {
           v = this.filterViruses[item];
-          q = "default";
+          q = 1;
         }
 
         msg += v.name+ ", quantity = "+q+"\n"
+        this.addItemBasket({item: v._id, amount: q})
       })
       alert(msg);
 

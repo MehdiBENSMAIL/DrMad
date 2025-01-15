@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import VirusesView from '../views/VirusesView.vue'
+import ItemsList from "@/components/ItemsList.vue";
 
 Vue.use(VueRouter)
 
@@ -8,7 +8,7 @@ const routes = [
   {
     path: '/shop/items',
     name: 'shopitems',
-    component: VirusesView
+    component: ItemsList
   },
   {
     path: '/shop/login',
@@ -22,7 +22,6 @@ const routes = [
     // import dynamique du composant, plutôt qu'en début de fichier, comme la route prédécente.
     component: () => import('../views/BankAccountView.vue')
   }
-
 ]
 
 const router = new VueRouter({

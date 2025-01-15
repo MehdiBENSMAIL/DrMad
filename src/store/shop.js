@@ -5,7 +5,7 @@ export default {
     state: () => ({
         viruses: [],
         shopUser: null,
-        basket: [],
+        basket: null,
     }),
     mutations: {
         updateViruses(state, viruses) {
@@ -17,8 +17,24 @@ export default {
         updateBasket(state, basket) {
             state.basket = basket
         },
-        addItemBasket(state, item) {
-            // TODO : à faire
+        addItemBasket(state, itemData) {
+            // Vérifie si l'item existe déjà dans le panier
+            const existingItemIndex = state.basket.items.findIndex(
+                basketItem => basketItem.item === itemData.item
+            );
+
+            // Si l'item existe déjà
+            if (existingItemIndex !== -1) {
+                // Met à jour l'amount de l'item existant
+                state.basket.items[existingItemIndex]['amount'] += itemData.amount;
+                console.log('append')
+            } else {
+                // Si l'item n'existe pas, l'ajoute au tableau
+                state.basket.items.push(itemData);
+            }
+        },
+        removeItemBasket(state, itemId) {
+            state.basket.items = state.basket.items.filter(basketItem => basketItem.item === itemId)
         }
     },
     actions: {
@@ -42,21 +58,22 @@ export default {
                 console.log(response.data)
             }
         },
-        async setBasket({commit}, userId) {
+        async setBasket({commit, state}) {
             console.log('récupération du panier déjà existant');
-            let response = await ShopService.getUserBasket(userId)
+            let response = await ShopService.getUserBasket(state.shopUser._id)
+
             if (response.error === 0) {
-                commit('updateBasket', response.data)
+                commit('updateBasket', response.data ?? {items: []})
             }
             else {
                 console.log(response.data)
             }
         },
-        async clearBasket({commit}, userId) {
+        async clearBasket({commit, state}) {
             console.log('suppression du panier');
 
             let clearBasket = {items: []};
-            let response = await ShopService.setUserBasket(userId, clearBasket);
+            let response = await ShopService.setUserBasket(state.shopUser._id, clearBasket);
             if (response.error === 0) {
                 commit('updateBasket', clearBasket)
             }
@@ -64,12 +81,20 @@ export default {
                 console.log(response.data)
             }
         },
-        // FIXME : à vérifier
-        async addItemBasket({commit, state}, userId, data) {
+        async addItemBasket({commit, state}, itemData) {
             console.log('ajout d\'item dans le panier');
-            commit('addItemBasket', data);
+            commit('addItemBasket', itemData);
 
-            let response = await ShopService.setUserBasket(userId, state.basket);
+            let response = await ShopService.setUserBasket(state.shopUser._id, state.basket);
+            if (response.error !== 0) {
+                console.log(response.data)
+            }
+        },
+        async removeItemBasket({commit, state}, itemId) {
+            console.log('suppresion d\'un item dans le panier');
+            commit('removeItemBasket', itemId);
+
+            let response = await ShopService.setUserBasket(state.shopUser._id, state.basket);
             if (response.error !== 0) {
                 console.log(response.data)
             }
