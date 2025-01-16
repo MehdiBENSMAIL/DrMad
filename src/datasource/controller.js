@@ -107,12 +107,14 @@ function addOrder(data) {
   const uuid = uuidv4();
   let orderData = {
     items,
-    date: Date.now(),
+    date: { "$date": Date.now() },
     total: totalPrice,
     status: 'waiting_payment',
     uuid
   }
-  user.order.push(orderData);
+
+  if(!user.orders) user.orders = [];
+  user.orders.push(orderData);
 
   return { error: 0, status: 200, data: { uuid } };
 }

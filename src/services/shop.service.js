@@ -95,7 +95,7 @@ async function addOrder(data) {
   }
       // NB: le catch n'aura lieu que pour des requête vers l'API, s'il y a une erreur réseau
   catch(err) {
-    response = {error: 1, status: 404, data: 'erreur réseau, impossible de récupérer le panier'  }
+    response = {error: 1, status: 404, data: 'erreur réseau, d\'ajouter un item dans le panier'  }
   }
   return response
 }
@@ -105,4 +105,5 @@ export default {
   getAllViruses,
   getUserBasket,
   setUserBasket,
+  addOrder,
 }
