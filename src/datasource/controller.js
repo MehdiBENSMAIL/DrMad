@@ -104,7 +104,7 @@ function addOrder(data) {
     date: { "$date": Date.now() },
     total: totalPrice,
     status: 'waiting_payment',
-    uuid
+    _id: uuid,
   }
 
   if(!user.orders) user.orders = [];

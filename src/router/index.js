@@ -22,7 +22,7 @@ const routes = [
         // FIXME : a remplacer
       { path: 'login', name: 'shoplogin', component: () => import('../views/ShopLoginView.vue') },
       { path: 'buy', name: 'shopbuy', component: ShopBuy },
-      { path: 'pay/:orderId?', name: 'shoppay', component: { shopmain: ShopPay }, props: { shopmain: true } },
+      { path: 'pay/:orderId?', name: 'shoppay', component: ShopPay, props: true },
       { path: 'orders', name: 'ShopOrders', component: ShopOrders },
       { path: 'items', name: 'shopitems', component: VirusesView },
     ] },
