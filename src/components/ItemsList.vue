@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <h1>Les virus</h1>
@@ -23,42 +22,17 @@
     </table>
     <hr />
 
-    <!-- version avec liste séparée : décommenter pour tester
-
-    <p>Liste filtrée par prix</p>
-    <ul>
-      <li v-for="(virus, index) in filterVirusesByPrice" :key="index">{{virus.name}} : {{virus.price}}</li>
-    </ul>
-    <hr />
-    <p>Liste filtrée par nom</p>
-    <ul>
-      <li v-for="(virus, index) in filterVirusesByName" :key="index">{{virus.name}} : {{virus.price}}</li>
-    </ul>
-    <hr />
-    <p>Liste filtrée par stock</p>
-    <table>
-      <tr>
-        <th>Nom</th><th>Prix</th>
-      </tr>
-      <tr v-for="(virus, index) in filterVirusesByStock" :key="index">
-        <td>{{virus.name}}</td>
-        <td>{{virus.price}}</td>
-      </tr>
-    </table>
-
-    -->
-
     <!-- version avec filtre multi-critères -->
     <CheckedList :data="filterViruses"
-                 :item-amount="true"
+                 item-amount
                  :fields="['name', 'price']"
                  item-check
                  :item-button="{show: true, text:'Add to cart'}"
                  :list-button="{show: true, text:'Add to cart'}"
                  :checked="checked"
                  @checked-changed="changeSelection($event)"
-                 @item-button-clicked="addItemsToCard()"
-                 @list-button-clicked="addListItemsToCard()"
+                 @item-button-clicked="showVirusInfos($event)"
+                 @list-button-clicked="showVirusSelectedAndClearSelection($event)"
     >
 
     </CheckedList>
@@ -70,8 +44,7 @@
 import {mapState, mapActions} from 'vuex'
 import CheckedList from "@/components/CheckedList";
 export default {
-  // TODO : Add promotions
-  name: 'VirusesView',
+  name: 'ItemsList',
   components: {CheckedList},
   data: () => ({
     priceFilter: 0,
@@ -80,6 +53,7 @@ export default {
     filterPriceActive : false,
     filterNameActive : false,
     filterStockActive : false,
+    itemAmount: true,
     selected: []
   }),
   computed: {
@@ -137,7 +111,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('shop', ['getAllViruses']),
+    ...mapActions('shop', ['getAllViruses' , 'setBasket', 'addItemBasket', 'removeItemBasket', 'clearBasket']),
     changeSelection(idx) {
       // get the virus in the filtered list
       let v = this.filterViruses[idx]
@@ -152,24 +126,40 @@ export default {
         this.selected.push(i)
       }
     },
-    addItemsToCard() {
-      // TODO : rewrite this function (and rename it)
-      // let v = this.filterViruses[item[0]];
-      // let q = item[1];
+    showVirusInfos(item) {
+      let v;
+      let q;
+      if(this.itemAmount) {
+        v = this.filterViruses[item[0]];
+        q = item[1];
+      } else {
+        v = this.filterViruses[item];
+        q = 1;
+      }
+
+      let msg = v.name+ ", quantity = "+q+", stock = "+v.stock+", for sell = "+v.sold
+      alert(msg)
+
+      this.addItemBasket({item: v._id, amount: q})
     },
-    addListItemsToCard() {
-      // TODO : rewrite this function (and rename it)
-      // items.forEach(item => {
-      //   let v;
-      //   let q;
-      //   if(this.itemAmount) {
-      //     v = this.filterViruses[item[0]];
-      //     q = item[1];
-      //   } else {
-      //     v = this.filterViruses[item];
-      //     q = "default";
-      //   }
-      // })
+    showVirusSelectedAndClearSelection(items) {
+      let msg = "";
+      items.forEach(item => {
+        let v;
+        let q;
+        if(this.itemAmount) {
+          v = this.filterViruses[item[0]];
+          q = item[1];
+        } else {
+          v = this.filterViruses[item];
+          q = 1;
+        }
+
+        msg += v.name+ ", quantity = "+q+"\n"
+        this.addItemBasket({item: v._id, amount: q})
+      })
+      alert(msg);
+
       // clear selection
       this.selected = [];
     },

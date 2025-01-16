@@ -38,12 +38,11 @@ function shopLogin(data) {
     session: user.session,
   };
 
-  console.log("HELLO");
-  return { error: 0, status: 200, data: u, redirect: "/shop/buy" };
+  return { error: 0, status: 200, data: u, redirect: '/shop/buy' };
 }
 
 function getAllViruses() {
-  return { error: 0, data: items };
+  return { error: 0, status: 200, data: items };
 }
 
 function getAccountAmount(number) {
@@ -81,11 +80,75 @@ function getAccountTransactions(number) {
   return { error: 0, status: 200, data: trans };
 }
 
-//function 
+function setUserBasket(data) {
+  let user = shopusers.find(e => e._id === data.userId);
+  user.basket = data.basket;
+  return { error: 0, status: 200 }
+}
+
+function getUserBasket(data) {
+  const user = shopusers.find(e => e._id === data.userId);
+  if(!user) {
+    return { error: 1, status: 400, data: 'Client doesn\'t exist' };
+  }
+
+  return { error: 0, status: 200, data: user.basket };
+}
+
+function addOrder(data) {
+  const user = shopusers.find(e => e._id === data.userId);
+  if(!user) {
+    return { error: 1, status: 400, data: 'Client doesn\'t exist' };
+  }
+
+  const items = [];
+  let totalPrice = 0;
+  for(let i=0; i<data.items.length; i++) {
+    const itemData = data.items[i];
+
+    let item = {
+      name: itemData.item.name,
+      description: itemData.item.description,
+      price: itemData.item.price,
+      promotion: itemData.item.promotion,
+      object: itemData.item.object,
+    }
+    items.push({item, amount: itemData.amount});
+
+    let bestPromo = 0;
+    itemData.item.promotion.forEach(promotion => {
+      if(promotion.amount <= itemData.amount) {
+        if(bestPromo < promotion.discount) {
+          bestPromo = promotion.discount;
+        }
+      }
+    })
+
+    const normalPrice = itemData.amount * itemData.item.price;
+    totalPrice += normalPrice / (1 + (bestPromo / 100) ) ;
+  }
+
+  const uuid = uuidv4();
+  let orderData = {
+    items,
+    date: { "$date": Date.now() },
+    total: totalPrice,
+    status: 'waiting_payment',
+    uuid
+  }
+
+  if(!user.orders) user.orders = [];
+  user.orders.push(orderData);
+
+  return { error: 0, status: 200, data: { uuid } };
+}
 
 export default {
   shopLogin,
   getAllViruses,
   getAccountAmount,
   getAccountTransactions,
-};
+  setUserBasket,
+  getUserBasket,
+  addOrder,
+}

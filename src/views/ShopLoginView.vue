@@ -24,10 +24,11 @@ export default {
     ...mapState('shop', ['shopUser']),
   },
   methods: {
-    ...mapActions('shop', ['shopLogin']),
+    ...mapActions('shop', ['shopLogin', 'setBasket']),
     async handleLogin() {
       this.errorMessage = '';
       const response = await this.shopLogin({ login: this.login, password: this.password });
+      await this.setBasket();
       if (response && response.error !== 0) {
         this.errorMessage = response.data;
       }
