@@ -23,10 +23,9 @@ export default {
             console.log('get account amount');
             let response = await BankAccountService.getAccountAmount(number)
             if (response.error === 0) {
-                commit('updateAccountAmount', response.data)
+                commit('updateAccountAmount', response.data.amount)
                 commit('updateAccountNumberError', 1)
-            }
-            else {
+            } else {
                 console.log(response.data)
                 commit('updateAccountNumberError', -1)
             }
@@ -35,10 +34,9 @@ export default {
             console.log('get account transactions');
             let response = await BankAccountService.getAccountTransactions(number)
             if (response.error === 0) {
-                commit('updateAccountTransactions', response.data)
+                commit('updateAccountTransactions', response.data.transactions)
                 commit('updateAccountNumberError', 1)
-            }
-            else {
+            } else {
                 console.log(response.data)
                 commit('updateAccountNumberError', -1)
             }

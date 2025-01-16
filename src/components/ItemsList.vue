@@ -7,7 +7,7 @@
     <label for="filternameactive">par nom</label><input type="checkbox" v-model="filterNameActive" id="filternameactive">
     <label for="filterstockactive">par stock</label><input type="checkbox" v-model="filterStockActive" id="filterstockactive">
     <hr />
-    <table>
+    <table aria-hidden="true">
       <tr>
         <td v-if="filterPriceActive">
           <label for="filterprice">prix inférieur à : </label><input v-model="priceFilter" id="filterprice">
@@ -31,8 +31,8 @@
                  :list-button="{show: true, text:'Add to cart'}"
                  :checked="checked"
                  @checked-changed="changeSelection($event)"
-                 @item-button-clicked="showVirusInfos($event)"
-                 @list-button-clicked="showVirusSelectedAndClearSelection($event)"
+                 @item-button-clicked="addVirusToBasket($event)"
+                 @list-button-clicked="addSelectedVirusesToBasket($event)"
     >
 
     </CheckedList>
@@ -111,7 +111,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('shop', ['getAllViruses' , 'setBasket', 'addItemBasket', 'removeItemBasket', 'clearBasket']),
+    ...mapActions('shop', ['getAllViruses' , 'addItemBasket']),
     changeSelection(idx) {
       // get the virus in the filtered list
       let v = this.filterViruses[idx]
@@ -126,7 +126,7 @@ export default {
         this.selected.push(i)
       }
     },
-    showVirusInfos(item) {
+    addVirusToBasket(item) {
       let v;
       let q;
       if(this.itemAmount) {
@@ -137,13 +137,9 @@ export default {
         q = 1;
       }
 
-      let msg = v.name+ ", quantity = "+q+", stock = "+v.stock+", for sell = "+v.sold
-      alert(msg)
-
       this.addItemBasket({item: v._id, amount: q})
     },
-    showVirusSelectedAndClearSelection(items) {
-      let msg = "";
+    addSelectedVirusesToBasket(items) {
       items.forEach(item => {
         let v;
         let q;
@@ -155,20 +151,11 @@ export default {
           q = 1;
         }
 
-        msg += v.name+ ", quantity = "+q+"\n"
         this.addItemBasket({item: v._id, amount: q})
       })
-      alert(msg);
 
       // clear selection
       this.selected = [];
-    },
-    showVirusNames() {
-      let msg = ""
-      this.selected.forEach(idx => {
-        msg += this.viruses[idx].name+" "
-      })
-      alert(msg)
     }
   },
   mounted() {

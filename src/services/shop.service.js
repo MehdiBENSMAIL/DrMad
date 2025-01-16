@@ -1,9 +1,6 @@
 import LocalSource from "@/datasource/controller";
+import { errorResponse } from "@/services/index";
 
-async function shopLoginFromLocalSource(data) {
-  // récupération auprès de la source locale
-  return LocalSource.shopLogin(data)
-}
 /*
 async function shopLoginFromAPI(data) {
   // a écrire quand l'API est fonctionnelle
@@ -11,17 +8,20 @@ async function shopLoginFromAPI(data) {
 }
  */
 
-async function getAllVirusesFromLocalSource() {
-  // récupération auprès de la source locale
-  return LocalSource.getAllViruses()
-}
-
 /*
 async function getAllVirusesFromAPI() {
   // a écrire quand l'API est fonctionnelle
   return {}
 }
 */
+
+async function shopLoginFromLocalSource(data) {
+  return LocalSource.shopLogin(data)
+}
+
+async function getAllVirusesFromLocalSource() {
+  return LocalSource.getAllViruses()
+}
 
 async function setUserBasketFromLocalSource(data) {
   return LocalSource.setUserBasket(data)
@@ -36,66 +36,51 @@ async function addOrderFromLocalSource(data) {
 }
 
 async function shopLogin(data) {
-  let response = null;
+  let response;
   try {
-    // changer la méthode appelée quand cette fonctionnalité l'API est prête
     response = await shopLoginFromLocalSource(data)
-  }
-    // NB: le catch n'aura lieu que pour des requête vers l'API, s'il y a une erreur réseau
-  catch(err) {
-    response = {error: 1, status: 404, data: 'erreur réseau, impossible de se loguer'  }
+  } catch(err) {
+    response = errorResponse('erreur réseau, impossible de se connecter')
   }
   return response
 }
 
 async function getAllViruses() {
-  let response = null;
+  let response;
   try {
-    // changer la méthode appelée quand cette fonctionnalité l'API est prête
     response = await getAllVirusesFromLocalSource()
-  }
-  // NB: le catch n'aura lieu que pour des requête vers l'API, s'il y a une erreur réseau
-  catch(err) {
-    response = {error: 1, status: 404, data: 'erreur réseau, impossible de récupérer la liste des viruses'  }
+  } catch(err) {
+    response = errorResponse('erreur réseau, impossible de récupérer la liste des viruses')
   }
   return response
 }
 
 async function setUserBasket(data) {
-  let response = null;
+  let response;
   try {
-    // changer la méthode appelée quand cette fonctionnalité l'API est prête
     response = await setUserBasketFromLocalSource(data)
-  }
-      // NB: le catch n'aura lieu que pour des requête vers l'API, s'il y a une erreur réseau
-  catch(err) {
-    response = {error: 1, status: 404, data: 'erreur réseau, impossible de modifier le panier'  }
+  } catch(err) {
+    response = errorResponse('erreur réseau, impossible de modifier le panier')
   }
   return response
 }
 
 async function getUserBasket(data) {
-  let response = null;
+  let response;
   try {
-    // changer la méthode appelée quand cette fonctionnalité l'API est prête
     response = await getUserBasketFromLocalSource(data)
-  }
-  // NB: le catch n'aura lieu que pour des requête vers l'API, s'il y a une erreur réseau
-  catch(err) {
-    response = {error: 1, status: 404, data: 'erreur réseau, impossible de récupérer le panier'  }
+  } catch(err) {
+    response = errorResponse('erreur réseau, impossible de récupérer le panier')
   }
   return response
 }
 
 async function addOrder(data) {
-  let response = null;
+  let response;
   try {
-    // changer la méthode appelée quand cette fonctionnalité l'API est prête
     response = await addOrderFromLocalSource(data);
-  }
-      // NB: le catch n'aura lieu que pour des requête vers l'API, s'il y a une erreur réseau
-  catch(err) {
-    response = {error: 1, status: 404, data: 'erreur réseau, d\'ajouter un item dans le panier'  }
+  } catch(err) {
+    response = errorResponse('erreur réseau, d\'ajouter un item dans le panier')
   }
   return response
 }
@@ -107,3 +92,4 @@ export default {
   setUserBasket,
   addOrder,
 }
+

@@ -1,5 +1,6 @@
 import LocalSource from "@/datasource/controller";
 import {Perso} from './data.service'
+import {errorResponse} from "@/services/index";
 
 async function getAllCharacsFromLocalSource() {
   // récupération auprès de la source locale
@@ -30,9 +31,8 @@ async function getAllCharacs() {
     // s'il y avait une erreur, le champ response.error > 0 et response.data contient le message d'erreur.
     // on renvoie donc directement response.
   }
-    // NB: le catch n'aura lieu que pour des requête vers l'API, s'il y a une erreur réseau
   catch(err) {
-    response = {error: 1, data: 'erreur réseau, impossible de récupérer la liste des villes'  }
+    response = errorResponse('erreur réseau, impossible de récupérer la liste des villes')
   }
   return response
 }

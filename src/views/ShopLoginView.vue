@@ -24,7 +24,7 @@ export default {
     ...mapState('shop', ['shopUser']),
   },
   methods: {
-    ...mapActions('shop', ['shopLogin', 'setBasket']),
+    ...mapActions('shop', ['shopLogin', 'getBasket']),
     async handleLogin() {
       this.errorMessage = '';
       const response = await this.shopLogin({ login: this.login, password: this.password });
@@ -33,8 +33,7 @@ export default {
         this.errorMessage = response.data;
         return;
       }
-      await this.setBasket();
-      this.$router.push(response.redirect)
+      await this.$router.push('/shop/buy')
     },
   },
 };

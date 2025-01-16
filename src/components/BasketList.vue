@@ -29,7 +29,7 @@ export default {
     // FIXME : refaire la fonction, me semble peut efficace (ajouter le nom de l'item dans le shop serait plus efficace mais ne respecte pas l'énoncé : voir TPn°4 5.3)
     basketViruses() {
       let items = [];
-      this.basket.items.forEach(itemData => {
+      this.basket?.items.forEach(itemData => {
         for (const viruse of this.viruses) {
           if(viruse._id === itemData.item) {
             items.push({'name': viruse.name, 'amount': itemData.amount});
@@ -41,7 +41,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('shop', ['removeItemBasket', 'clearBasket']),
+    ...mapActions('shop', ['removeItemBasket', 'clearBasket', 'getBasket']),
     removeItem(indexItem) {
       this.removeItemBasket(this.basket.items[indexItem].item)
     },
@@ -63,9 +63,12 @@ export default {
         this.clear();
         this.$router.push('/shop/pay/'+ response.data.uuid)
       } else {
-        console.log(response);
+        console.log(response.data);
       }
     }
+  },
+  mounted() {
+    this.getBasket()
   }
 }
 </script>

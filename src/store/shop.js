@@ -42,9 +42,8 @@ export default {
             console.log('login');
             let response = await ShopService.shopLogin(data)
             if (response.error === 0) {
-                commit('updateShopUser', response.data)
-            }
-            else {
+                commit('updateShopUser', response.data.user)
+            } else {
                 console.log(response.data)
             }
             return response;
@@ -53,20 +52,18 @@ export default {
             console.log('récupération des viruses');
             let response = await ShopService.getAllViruses()
             if (response.error === 0) {
-                commit('updateViruses', response.data)
-            }
-            else {
+                commit('updateViruses', response.data.items)
+            } else {
                 console.log(response.data)
             }
         },
-        async setBasket({commit, state}) {
+        async getBasket({commit, state}) {
             console.log('récupération du panier déjà existant');
-            let response = await ShopService.getUserBasket({userId: state.shopUser._id})
+            let response = await ShopService.getUserBasket({ userId: state.shopUser?._id })
 
             if (response.error === 0) {
-                commit('updateBasket', response.data ?? {items: []})
-            }
-            else {
+                commit('updateBasket', response.data.basket)
+            } else {
                 console.log(response.data)
             }
         },
@@ -74,29 +71,30 @@ export default {
             console.log('suppression du panier');
 
             let clearBasket = {items: []};
-            let response = await ShopService.setUserBasket({ userId: state.shopUser._id, basket: clearBasket });
+            let response = await ShopService.setUserBasket({ userId: state.shopUser?._id, basket: clearBasket });
             if (response.error === 0) {
                 commit('updateBasket', clearBasket)
-            }
-            else {
+            } else {
                 console.log(response.data)
             }
         },
         async addItemBasket({commit, state}, itemData) {
             console.log('ajout d\'item dans le panier');
-            commit('addItemBasketMutation', itemData);
 
-            let response = await ShopService.setUserBasket({ userId: state.shopUser._id, basket: state.basket });
-            if (response.error !== 0) {
+            let response = await ShopService.setUserBasket({ userId: state.shopUser?._id, basket: state.basket });
+            if (response.error === 0) {
+                commit('addItemBasketMutation', itemData);
+            } else {
                 console.log(response.data)
             }
         },
         async removeItemBasket({commit, state}, itemId) {
             console.log('suppresion d\'un item dans le panier');
-            commit('removeItemBasketMutation', itemId);
 
-            let response = await ShopService.setUserBasket({ userId: state.shopUser._id, basket: state.basket });
-            if (response.error !== 0) {
+            let response = await ShopService.setUserBasket({ userId: state.shopUser?._id, basket: state.basket });
+            if (response.error === 0) {
+                commit('removeItemBasketMutation', itemId);
+            } else {
                 console.log(response.data)
             }
         }
