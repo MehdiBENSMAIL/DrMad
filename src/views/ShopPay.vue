@@ -6,5 +6,7 @@
 </template>
 
 <script>
-
+export default {
+    name: 'ShopPay',
+}
 </script>

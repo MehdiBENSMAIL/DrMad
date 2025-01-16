@@ -1,5 +1,11 @@
 <template>
     <div>
-        <h1>Bienvenue à la boutique du DrMad.</h1>
+        <h1>Bienvenue sur DrMadmedia.fr</h1>
     </div>
 </template>
+
+<script>
+export default {
+    name: 'ShopHome',
+}
+</script>
