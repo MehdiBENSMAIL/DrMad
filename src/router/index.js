@@ -6,7 +6,7 @@ import VueRouter from 'vue-router'
 import VirusesView from '../views/VirusesView.vue'
 import ShopView from '../views/ShopView.vue'
 import ShopHome from '../views/ShopHome.vue'
-import ShopLogin from '../views/ShopLogin.vue'
+// import ShopLogin from '../views/ShopLogin.vue'
 import ShopBuy from '../views/ShopBuy.vue'
 import ShopPay from '../views/ShopPay.vue'
 import ShopOrders from '../views/ShopOrders.vue'
@@ -19,7 +19,8 @@ const routes = [
     children: [
       { path: 'home', redirect: '/shop' },
       { path: '', name: 'shophome', component: ShopHome, alias: '/shop' },
-      { path: 'login', name: 'shoplogin', component: ShopLogin },
+        // FIXME : a remplacer
+      { path: 'login', name: 'shoplogin', component: () => import('../views/ShopLoginView.vue') },
       { path: 'buy', name: 'shopbuy', component: ShopBuy },
       { path: 'pay/:orderId?', name: 'shoppay',
         component: { shopmain: ShopPay },
