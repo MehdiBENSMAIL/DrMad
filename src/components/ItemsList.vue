@@ -24,7 +24,7 @@
 
     <!-- version avec filtre multi-critères -->
     <CheckedList :data="filterViruses"
-                 :item-amount="itemAmount"
+                 item-amount
                  :fields="['name', 'price']"
                  item-check
                  :item-button="{show: true, text:'Add to cart'}"

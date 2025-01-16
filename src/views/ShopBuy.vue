@@ -10,8 +10,8 @@ export default {
 
 <template>
   <div class="col">
-    <ItemsList/>
-    <BasketList/>
+    <ItemsList class="itemList"/>
+    <BasketList class="basketList"/>
   </div>
 </template>
 
@@ -20,5 +20,8 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+  }
+  .itemList, .basketList {
+    width: 50%;
   }
 </style>

@@ -69,12 +69,14 @@ export default {
     handleItemsSelectButton() {
       let items = [];
 
-      for(let i=0; i<this.$props.data.length; i++) {
-        if(this.checked[i]) {
-          if(this.itemAmount) {
-            items.push([i, this.amounts[i]]);
-          } else {
-            items.push(i);
+      if(this.itemCheck) {
+        for(let i=0; i<this.$props.data.length; i++) {
+          if(this.checked[i]) {
+            if(this.itemAmount) {
+              items.push([i, this.amounts[i]]);
+            } else {
+              items.push(i);
+            }
           }
         }
       }

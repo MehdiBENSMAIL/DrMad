@@ -17,7 +17,7 @@ export default {
         updateBasket(state, basket) {
             state.basket = basket
         },
-        addItemBasket(state, itemData) {
+        addItemBasketMutation(state, itemData) {
             // Vérifie si l'item existe déjà dans le panier
             const existingItemIndex = state.basket.items.findIndex(
                 basketItem => basketItem.item === itemData.item
@@ -33,8 +33,8 @@ export default {
                 state.basket.items.push(itemData);
             }
         },
-        removeItemBasket(state, itemId) {
-            state.basket.items = state.basket.items.filter(basketItem => basketItem.item === itemId)
+        removeItemBasketMutation(state, itemId) {
+            state.basket.items = state.basket.items.filter(basketItem => basketItem.item !== itemId)
         }
     },
     actions: {
@@ -83,7 +83,7 @@ export default {
         },
         async addItemBasket({commit, state}, itemData) {
             console.log('ajout d\'item dans le panier');
-            commit('addItemBasket', itemData);
+            commit('addItemBasketMutation', itemData);
 
             let response = await ShopService.setUserBasket(state.shopUser._id, state.basket);
             if (response.error !== 0) {
@@ -92,7 +92,7 @@ export default {
         },
         async removeItemBasket({commit, state}, itemId) {
             console.log('suppresion d\'un item dans le panier');
-            commit('removeItemBasket', itemId);
+            commit('removeItemBasketMutation', itemId);
 
             let response = await ShopService.setUserBasket(state.shopUser._id, state.basket);
             if (response.error !== 0) {

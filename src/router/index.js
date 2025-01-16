@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import ItemsList from "@/components/ItemsList.vue";
+import ShopBuy from "@/views/ShopBuy.vue";
 
 Vue.use(VueRouter)
 
@@ -8,7 +8,7 @@ const routes = [
   {
     path: '/shop/items',
     name: 'shopitems',
-    component: ItemsList
+    component: ShopBuy
   },
   {
     path: '/shop/login',
