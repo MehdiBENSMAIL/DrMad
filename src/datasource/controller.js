@@ -1,4 +1,4 @@
-import { items, shopusers, bankaccounts, transactions } from "./data";
+import {items, shopusers, bankaccounts, transactions} from "./data";
 import { v4 as uuidv4 } from "uuid";
 import { compareSync } from "bcryptjs";
 
@@ -113,6 +113,36 @@ function addOrder(data) {
   return normalResponse({ uuid })
 }
 
+function checkOrderExist(data) {
+  const user = shopusers.find(e => e._id === data.userId)
+  if(!user) return errorResponse('L\'utilisateur n\'existe pas')
+
+  const order = user.orders?.find(e => e._id === data.orderId)
+  let exist = false;
+  let finalise;
+
+  if(order) {
+    exist = true;
+    finalise = order.status === 'finalized';
+  }
+
+  return normalResponse({ exist, finalise })
+}
+
+function finaliseOrder(data) {
+  let user = shopusers.find(e => e._id === data.userId)
+  if(!user) return errorResponse('L\'utilisateur n\'existe pas')
+
+  let order = user.orders?.find(e => e._id === data.orderId) ?? false
+  if(!order) return errorResponse('La commande n\'existe pas')
+
+  if(order.status !== 'waiting_payment')
+    return errorResponse('La commande n\'est pas en attente de payement')
+
+  order.status = 'finalized'
+  return normalResponse()
+}
+
 export default {
   shopLogin,
   getAllViruses,
@@ -121,4 +151,6 @@ export default {
   setUserBasket,
   getUserBasket,
   addOrder,
+  checkOrderExist,
+  finaliseOrder,
 }
