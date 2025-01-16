@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-<<<<<<< HEAD
+
 
 // Shop
 import VirusesView from '../views/VirusesView.vue'
@@ -10,14 +10,10 @@ import ShopLogin from '../views/ShopLogin.vue'
 import ShopBuy from '../views/ShopBuy.vue'
 import ShopPay from '../views/ShopPay.vue'
 import ShopOrders from '../views/ShopOrders.vue'
-=======
-import ShopBuy from "@/views/ShopBuy.vue";
->>>>>>> TP4-Flo
 
 Vue.use(VueRouter)
 
 const routes = [
-<<<<<<< HEAD
   { path: '/shop',
     component: ShopView,
     children: [
@@ -33,25 +29,6 @@ const routes = [
     ] },
   { path: '/shop/login', name: 'shoplogin', component: () => import('../views/ShopLoginView.vue') },
   { path: '/bank/account', name: 'bankaccount', component: () => import('../views/BankAccountView.vue') }
-=======
-  {
-    path: '/shop/items',
-    name: 'shopitems',
-    component: ShopBuy
-  },
-  {
-    path: '/shop/login',
-    name: 'shoplogin',
-    // import dynamique du composant, plutôt qu'en début de fichier, comme la route prédécente.
-    component: () => import('../views/ShopLoginView.vue')
-  },
-  {
-    path: '/bank/account',
-    name: 'bankaccount',
-    // import dynamique du composant, plutôt qu'en début de fichier, comme la route prédécente.
-    component: () => import('../views/BankAccountView.vue')
-  }
->>>>>>> TP4-Flo
 ]
 
 const router = new VueRouter({
