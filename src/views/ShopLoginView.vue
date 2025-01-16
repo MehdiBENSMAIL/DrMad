@@ -28,10 +28,13 @@ export default {
     async handleLogin() {
       this.errorMessage = '';
       const response = await this.shopLogin({ login: this.login, password: this.password });
-      await this.setBasket();
+
       if (response && response.error !== 0) {
         this.errorMessage = response.data;
+        return;
       }
+      await this.setBasket();
+      this.$router.push(response.redirect)
     },
   },
 };

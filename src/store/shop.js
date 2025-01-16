@@ -1,4 +1,3 @@
-import router from '@/router';
 import ShopService from '../services/shop.service'
 
 export default {
@@ -44,7 +43,6 @@ export default {
             let response = await ShopService.shopLogin(data)
             if (response.error === 0) {
                 commit('updateShopUser', response.data)
-                router.push(response.redirect)
             }
             else {
                 console.log(response.data)
