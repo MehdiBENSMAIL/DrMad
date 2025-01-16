@@ -23,14 +23,17 @@ async function getAllVirusesFromAPI() {
 }
 */
 
-async function setUserBasketFromLocalSource(userId, data) {
-  return LocalSource.setUserBasket(userId, data)
+async function setUserBasketFromLocalSource(data) {
+  return LocalSource.setUserBasket(data)
 }
 
-async function getUserBasketFromLocalSource(userId) {
-  return LocalSource.getUserBasket(userId)
+async function getUserBasketFromLocalSource(data) {
+  return LocalSource.getUserBasket(data)
 }
 
+async function addOrderFromLocalSource(data) {
+  return LocalSource.addOrder(data)
+}
 
 async function shopLogin(data) {
   let response = null;
@@ -58,11 +61,11 @@ async function getAllViruses() {
   return response
 }
 
-async function setUserBasket(userId, data) {
+async function setUserBasket(data) {
   let response = null;
   try {
     // changer la méthode appelée quand cette fonctionnalité l'API est prête
-    response = {error: 0, data: await setUserBasketFromLocalSource(userId, data)}
+    response = await setUserBasketFromLocalSource(data)
   }
       // NB: le catch n'aura lieu que pour des requête vers l'API, s'il y a une erreur réseau
   catch(err) {
@@ -71,13 +74,26 @@ async function setUserBasket(userId, data) {
   return response
 }
 
-async function getUserBasket(userId) {
+async function getUserBasket(data) {
   let response = null;
   try {
     // changer la méthode appelée quand cette fonctionnalité l'API est prête
-    response = {error: 0, data: await getUserBasketFromLocalSource(userId)}
+    response = await getUserBasketFromLocalSource(data)
   }
   // NB: le catch n'aura lieu que pour des requête vers l'API, s'il y a une erreur réseau
+  catch(err) {
+    response = {error: 1, status: 404, data: 'erreur réseau, impossible de récupérer le panier'  }
+  }
+  return response
+}
+
+async function addOrder(data) {
+  let response = null;
+  try {
+    // changer la méthode appelée quand cette fonctionnalité l'API est prête
+    response = await addOrderFromLocalSource(data);
+  }
+      // NB: le catch n'aura lieu que pour des requête vers l'API, s'il y a une erreur réseau
   catch(err) {
     response = {error: 1, status: 404, data: 'erreur réseau, impossible de récupérer le panier'  }
   }
