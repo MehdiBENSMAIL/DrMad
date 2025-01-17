@@ -101,7 +101,7 @@ function addOrder(data) {
   const uuid = uuidv4();
   let orderData = {
     items,
-    date: { "$date": Date.now() },
+    date: { "$date": new Date().toISOString() },
     total: totalPrice,
     status: 'waiting_payment',
     _id: uuid,

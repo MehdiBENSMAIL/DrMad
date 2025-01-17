@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import OrderService from "@/services/order.service";
+import ShopService from "@/services/shop.service";
 import { mapState } from "vuex";
 
 export default {
@@ -29,7 +29,7 @@ export default {
     // },
     localOrderId: {
       async handler(newOrderId) {
-        const response = await OrderService.checkOrderExist({ userId: this.shopUser._id, orderId: newOrderId });
+        const response = await ShopService.checkOrderExist({ userId: this.shopUser._id, orderId: newOrderId });
         console.log(response);
         if(response.error === 0) {
           this.orderExist = response.data.exist;
@@ -44,7 +44,7 @@ export default {
   methods: {
     async payOrder() {
       if(!this.orderExist || this.isAlreadyPayed) return;
-      const response = await OrderService.finaliseOrder({ userId: this.shopUser._id, orderId: this.localOrderId });
+      const response = await ShopService.finaliseOrder({ userId: this.shopUser._id, orderId: this.localOrderId });
       if(response.error === 0) {
         this.$router.push('/shop/orders')
       } else {
