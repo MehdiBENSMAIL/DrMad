@@ -45,7 +45,7 @@ export default {
     },
     async payOrder() {
       if(!this.orderExist || this.isAlreadyPayed) return;
-      const response = await ShopService.finaliseOrder({ userId: this.shopUser._id, orderId: this.searchOrderId });
+      const response = await ShopService.finaliseOrder({ userId: this.shopUser._id, orderId: this.orderId });
       if(response.error === 0) {
         this.$router.push('/shop/orders')
       } else {
@@ -53,8 +53,9 @@ export default {
       }
     },
     async checkOrder() {
-      const response = await ShopService.checkOrderExist({ userId: this.shopUser._id, orderId: this.searchOrderId });
+      const response = await ShopService.checkOrderExist({ userId: this.shopUser._id, orderId: this.orderId });
       if(response.error === 0) {
+        // renvoyer la commande directement et faire les verifs des datas de la commande ici
         this.orderExist = response.data.exist;
         this.isAlreadyPayed = (this.orderExist) ? response.data.finalise : false;
       } else {
