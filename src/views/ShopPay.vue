@@ -8,9 +8,9 @@
         <button @click="search">Search</button>
       </div>
       <hr>
-      <div>date : </div>
+      <div v-if="orderExist">date : </div>
       <hr>
-      <div>
+      <div v-if="orderExist">
         <label>
           uuid transaction :
           <input type="text" v-model="transactionId" name="transactionId" id="transactionId"/>
@@ -51,17 +51,20 @@ export default {
       } else {
         console.log(response.data);
       }
-    }
+    },
+    async checkOrder() {
+      const response = await ShopService.checkOrderExist({ userId: this.shopUser._id, orderId: this.searchOrderId });
+      if(response.error === 0) {
+        this.orderExist = response.data.exist;
+        this.isAlreadyPayed = (this.orderExist) ? response.data.finalise : false;
+      } else {
+        console.log(response.data);
+      }
+    },
   },
   async mounted() {
     this.searchOrderId = this.orderId;
-    const response = await ShopService.checkOrderExist({ userId: this.shopUser._id, orderId: this.searchOrderId });
-    if(response.error === 0) {
-      this.orderExist = response.data.exist;
-      this.isAlreadyPayed = (this.orderExist) ? response.data.finalise : false;
-    } else {
-      console.log(response.data);
-    }
+    await this.checkOrder()
   }
 }
 </script>
