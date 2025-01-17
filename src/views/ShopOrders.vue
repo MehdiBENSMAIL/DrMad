@@ -16,8 +16,8 @@
           <td>{{ order.total }}</td>
           <td>{{ order.status }}</td>
           <td v-if="order.status === 'waiting_payment'">
-            <button>Payer</button>
-            <button>Annuler</button>
+            <button @click="payOrder(order._id)">Payer</button>
+            <button @click="cancelOrder({ orderId: order._id })">Annuler</button>
           </td>
         </tr>
       </tbody>
@@ -38,6 +38,9 @@ export default {
   },
   methods: {
     ...mapActions('shop', ['cancelOrder', 'getOrders']),
+    payOrder(orderId) {
+      this.$router.push('/shop/pay/' + orderId);
+    },
   },
   mounted() {
     this.getOrders();

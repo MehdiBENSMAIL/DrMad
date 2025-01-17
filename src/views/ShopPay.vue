@@ -1,8 +1,22 @@
 <template>
     <div>
-      <!-- TODO: FAIRE UNE INTERFACE ? -->
-      <input type="text" v-model="localOrderId" :disabled="isAlreadyPayed" name="orderId" id="orderId"/>
-      <button @click="payOrder">Payer</button>
+      <div>
+        <label>
+          uuid commande :
+          <input type="text" v-model="searchOrderId"  name="orderId" id="orderId"/>
+        </label>
+        <button @click="search">Search</button>
+      </div>
+      <hr>
+      <div>date : </div>
+      <hr>
+      <div>
+        <label>
+          uuid transaction :
+          <input type="text" v-model="transactionId" name="transactionId" id="transactionId"/>
+        </label>
+        <button @click="payOrder" :disabled="isAlreadyPayed">Payer</button>
+      </div>
     </div>
 </template>
 
@@ -15,7 +29,8 @@ export default {
   props: { orderId: { type: String } },
   data() {
     return {
-      localOrderId: this.orderId,
+      searchOrderId: '',
+      transactionId: '',
       orderExist: false,
       isAlreadyPayed: false,
     };
@@ -23,33 +38,29 @@ export default {
   computed: {
     ...mapState('shop', ['shopUser']),
   },
-  watch: {
-    // orderId() {
-    //   this.localOrderId = this.orderId;
-    // },
-    localOrderId: {
-      async handler(newOrderId) {
-        const response = await ShopService.checkOrderExist({ userId: this.shopUser._id, orderId: newOrderId });
-        console.log(response);
-        if(response.error === 0) {
-          this.orderExist = response.data.exist;
-          this.isAlreadyPayed = (this.orderExist) ? response.data.finalise : false;
-        } else {
-          console.log(response.data);
-        }
-      },
-      immediate: true,
-    }
-  },
   methods: {
+    search() {
+      if(this.searchOrderId === this.orderId) return;
+      this.$router.push('/shop/pay/'+this.searchOrderId);
+    },
     async payOrder() {
       if(!this.orderExist || this.isAlreadyPayed) return;
-      const response = await ShopService.finaliseOrder({ userId: this.shopUser._id, orderId: this.localOrderId });
+      const response = await ShopService.finaliseOrder({ userId: this.shopUser._id, orderId: this.searchOrderId });
       if(response.error === 0) {
         this.$router.push('/shop/orders')
       } else {
         console.log(response.data);
       }
+    }
+  },
+  async mounted() {
+    this.searchOrderId = this.orderId;
+    const response = await ShopService.checkOrderExist({ userId: this.shopUser._id, orderId: this.searchOrderId });
+    if(response.error === 0) {
+      this.orderExist = response.data.exist;
+      this.isAlreadyPayed = (this.orderExist) ? response.data.finalise : false;
+    } else {
+      console.log(response.data);
     }
   }
 }
