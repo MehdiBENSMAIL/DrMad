@@ -55,7 +55,7 @@ export default {
     async checkOrder() {
       const response = await ShopService.checkOrderExist({ userId: this.shopUser._id, orderId: this.orderId });
       if(response.error === 0) {
-        // renvoyer la commande directement et faire les verifs des datas de la commande ici
+        // FIXME renvoyer la commande directement et faire les verifs des datas de la commande ici
         this.orderExist = response.data.exist;
         this.isAlreadyPayed = (this.orderExist) ? response.data.finalise : false;
       } else {
