@@ -35,6 +35,22 @@ async function addOrderFromLocalSource(data) {
   return LocalSource.addOrder(data)
 }
 
+async function checkOrderExistFromLocalSource(data) {
+  return LocalSource.checkOrderExist(data)
+}
+
+async function finaliseOrderFromLocalSource(data) {
+  return LocalSource.finaliseOrder(data)
+}
+
+async function getAllOrdersFromLocalSource(data) {
+  return LocalSource.getAllOrders(data)
+}
+
+async function cancelOrderFromLocalSource(data) {
+  return LocalSource.cancelOrder(data)
+}
+
 async function shopLogin(data) {
   let response;
   try {
@@ -85,11 +101,55 @@ async function addOrder(data) {
   return response
 }
 
+async function checkOrderExist(data) {
+  let response;
+  try {
+    response = await checkOrderExistFromLocalSource(data)
+  } catch(err) {
+    response = errorResponse('erreur réseau, impossible de récupérer la commande')
+  }
+  return response
+}
+
+async function finaliseOrder(data) {
+  let response;
+  try {
+    response = await finaliseOrderFromLocalSource(data);
+  } catch(err) {
+    response = errorResponse('erreur réseau, impossible de finaliser la commande')
+  }
+  return response
+}
+
+async function getAllOrders(data) {
+  let response;
+  try {
+    response = await getAllOrdersFromLocalSource(data);
+  } catch(err) {
+    response = errorResponse('erreur réseau, impossible de récupérer les commandes')
+  }
+  return response
+}
+
+async function cancelOrder(data) {
+  let response;
+  try {
+    response = await cancelOrderFromLocalSource(data);
+  } catch(err) {
+    response = errorResponse('erreur réseau, impossible d\'annuler la commande')
+  }
+  return response
+}
+
 export default {
   shopLogin,
   getAllViruses,
   getUserBasket,
   setUserBasket,
   addOrder,
+  checkOrderExist,
+  finaliseOrder,
+  getAllOrders,
+  cancelOrder,
 }
 

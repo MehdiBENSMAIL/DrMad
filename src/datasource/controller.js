@@ -129,7 +129,13 @@ function checkOrderExist(data) {
   return normalResponse({ exist, finalise })
 }
 
-function finaliseOrder(data) {
+function getAllOrders(data) {
+  let user = shopusers.find(e => e._id === data.userId)
+  if(!user) return errorResponse('L\'utilisateur n\'existe pas')
+  return normalResponse({ orders: user.orders ?? [] })
+}
+
+function updateOrder(data, status) {
   let user = shopusers.find(e => e._id === data.userId)
   if(!user) return errorResponse('L\'utilisateur n\'existe pas')
 
@@ -139,9 +145,18 @@ function finaliseOrder(data) {
   if(order.status !== 'waiting_payment')
     return errorResponse('La commande n\'est pas en attente de payement')
 
-  order.status = 'finalized'
+  order.status = status
   return normalResponse()
 }
+
+function finaliseOrder(data) {
+  return updateOrder(data, 'finalized')
+}
+
+function cancelOrder(data) {
+  return updateOrder(data, 'cancelled')
+}
+
 
 export default {
   shopLogin,
@@ -153,4 +168,6 @@ export default {
   addOrder,
   checkOrderExist,
   finaliseOrder,
+  getAllOrders,
+  cancelOrder
 }
