@@ -1,9 +1,7 @@
 <template>
   <div id="app">
     <NavBar :titles="titles" @menu-clicked="goTo($event)"></NavBar>
-
     <h1>Welcome to DrMad app</h1>
-
     <router-view/>
   </div>
 </template>
