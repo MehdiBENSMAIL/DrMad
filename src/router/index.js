@@ -10,12 +10,12 @@ const routes = [
         component: ShopView,
         children: [
             {
-                path: '',
+                path: 'home',
                 name: 'shophome',
                 components: {
                     shopmain: () => import('../views/ShopHome.vue')
                 },
-                alias: 'home'
+                alias: '/shop'
             },
             {
                 path: 'login',
