@@ -1,20 +1,6 @@
 import LocalSource from "@/datasource/controller";
 import { errorResponse } from "@/services/index";
 
-/*
-async function shopLoginFromAPI(data) {
-  // a écrire quand l'API est fonctionnelle
-  return {}
-}
- */
-
-/*
-async function getAllVirusesFromAPI() {
-  // a écrire quand l'API est fonctionnelle
-  return {}
-}
-*/
-
 async function shopLoginFromLocalSource(data) {
   return LocalSource.shopLogin(data)
 }

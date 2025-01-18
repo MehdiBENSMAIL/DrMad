@@ -129,8 +129,7 @@ let shopusers = [
             }],
             "date": {"$date": "2024-09-02T09:10:58.884Z"},
             "total": 10500,
-            // FIXME : remettre le status en finalized, changé temporairement pour les tests
-            "status": "waiting_payment",
+            "status": "finalized",
             "uuid": "01010101-0000-0000-0000-010101010101",
             "_id": "66d58122c08b4d64db14cd05"
         }]
@@ -241,17 +240,12 @@ let auctiontransactions = [
     },
 ]
 
-let orders = [
-   { id: '1', userId: 'drmad', status: 'attente' }
-];
-
 module.exports = {
-   items,
-   shopusers,
-   bankaccounts,
-   transactions,
-   auctionusers,
-   auctionrequests,
-   auctiontransactions,
-   orders
+    items,
+    shopusers,
+    bankaccounts,
+    transactions,
+    auctionusers,
+    auctionrequests,
+    auctiontransactions,
 }
