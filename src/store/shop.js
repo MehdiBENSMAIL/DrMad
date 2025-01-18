@@ -12,7 +12,7 @@ export default {
             state.viruses = viruses;
         },
         updateShopUser(state, user) {
-            if(user) {
+            if (user) {
                 user.orders = user.orders ?? [];
             }
             state.shopUser = user;
@@ -49,7 +49,7 @@ export default {
         }
     },
     actions: {
-        async shopLogout({ commit }) {
+        shopLogout({commit}) {
             console.log('logout');
             commit('updateShopUser', null);
             commit('updateBasket', null);

@@ -2,13 +2,9 @@
   <div>
     <table>
       <tr>
-        <td v-for="(link, index) in titles" :key="index" :style="{paddingRight: '10px'}">
-          <button
-              :style="{backgroundColor: link.color}"
-              class="nav-button"
-              @click="$emit('menu-clicked', index)"
-          >
-            {{ link.text }}
+        <td v-for="(item, index) in items" :key="index" :style="{paddingRight: '10px'}">
+          <button class="nav-button" @click="handleButtonClicked(item)">
+            {{ item.text }}
           </button>
         </td>
       </tr>
@@ -19,6 +15,12 @@
 <script>
 export default {
   name: "NavBar",
-  props: {titles: Array},
+  props: {items: Array},
+  methods: {
+    handleButtonClicked(item) {
+      if (item.route) this.$router.push(item.route);
+      if (item.action) this.$emit('item-emit', item.action)
+    }
+  }
 }
 </script>

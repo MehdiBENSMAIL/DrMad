@@ -32,7 +32,7 @@ const routes = [
                 }
             },
             {
-                path: 'pay/:orderId',
+                path: 'pay/:orderId?',
                 name: 'shoppay',
                 components: {
                     shopmain: () => import('../views/ShopPay.vue')

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>Pay</h1>
     <div>
       <label>
         uuid commande :
@@ -7,10 +8,10 @@
       </label>
       <button @click="search">Search</button>
     </div>
-    <hr>
-    <div v-if="orderExist">date :</div>
-    <hr>
     <div v-if="orderExist">
+      <hr>
+      <div >date :</div>
+      <hr>
       <label>
         uuid transaction :
         <input id="transactionId" v-model="transactionId" name="transactionId" type="text"/>
