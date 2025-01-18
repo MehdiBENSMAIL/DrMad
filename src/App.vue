@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-
     <h1>Welcome to DrMad app</h1>
     <router-view/>
   </div>

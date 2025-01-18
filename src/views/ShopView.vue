@@ -1,26 +1,54 @@
 <template>
   <div>
     <h1>Boutique</h1>
-    <button v-if="shopUser === null" @click="goToLogin">Login</button>
-    <div v-else>test</div>
+    <NavBar :titles="titles" @menu-clicked="goTo($event)">test</NavBar>
     <hr>
     <router-view name="shopmain"></router-view>
   </div>
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
+import NavBar from "@/components/NavBar.vue";
 
 export default {
   name: 'ShopView',
-  components: {},
+  components: {NavBar},
+  data: () => ({
+    titlesUnlogged: [
+      {text:'Login'},
+    ],
+    titlesLogged: [
+      {text:'Buy'},
+      {text:'Pay'},
+      {text:'Orders'},
+      {text:'Logout'},
+    ],
+  }),
   computed: {
-    ...mapState('shop', ['shopUser'])
+    ...mapState('shop', ['shopUser']),
+    titles() {
+      return this.shopUser === null ? this.titlesUnlogged : this.titlesLogged;
+    }
   },
   methods: {
-    goToLogin() {
-      this.$router.push('/shop/login')
-    }
+    ...mapActions('shop', ['shopLogout']),
+    goTo(index) {
+      if (index === 0) {
+        if(this.shopUser === null) {
+          this.$router.push('/shop/login');
+        } else {
+          this.$router.push('/shop/buy');
+        }
+      } else if (index === 1) {
+        this.$router.push('/bank/pay');
+      } else if (index === 2) {
+        this.$router.push('/shop/orders');
+      } else if (index === 3) {
+        this.$router.push('/shop/login');
+        this.shopLogout();
+      }
+    },
   }
 }
 </script>

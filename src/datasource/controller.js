@@ -1,10 +1,8 @@
-import {bankaccounts, items, shopusers, transactions} from "./data";
+import {bankaccounts, items, shopusers, transactions} from "@/datasource/data";
 import {v4 as uuidv4} from "uuid";
 import {compareSync} from "bcryptjs";
 
 import {errorResponse, normalResponse} from "@/services";
-
-// import { checkAndFinalizeOrder } from '../order.service';
 
 function shopLogin(data) {
     // Vérifier si le login et le mot de passe sont fournis

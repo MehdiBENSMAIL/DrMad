@@ -22,9 +22,3 @@ export default {
   props: {titles: Array},
 }
 </script>
-
-<style scoped>
-.nav-button {
-  padding: 10px;
-}
-</style>
