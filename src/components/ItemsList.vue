@@ -2,34 +2,37 @@
   <div>
     <h1>Les virus</h1>
     <span>Filtres :</span>
-    <hr />
-    <label for="filterpriceactive">par prix</label><input type="checkbox" v-model="filterPriceActive" id="filterpriceactive">
-    <label for="filternameactive">par nom</label><input type="checkbox" v-model="filterNameActive" id="filternameactive">
-    <label for="filterstockactive">par stock</label><input type="checkbox" v-model="filterStockActive" id="filterstockactive">
-    <hr />
+    <hr/>
+    <label for="filterpriceactive">par prix</label><input id="filterpriceactive" v-model="filterPriceActive"
+                                                          type="checkbox">
+    <label for="filternameactive">par nom</label><input id="filternameactive" v-model="filterNameActive"
+                                                        type="checkbox">
+    <label for="filterstockactive">par stock</label><input id="filterstockactive" v-model="filterStockActive"
+                                                           type="checkbox">
+    <hr/>
     <table aria-hidden="true">
       <tr>
         <td v-if="filterPriceActive">
-          <label for="filterprice">prix inférieur à : </label><input v-model="priceFilter" id="filterprice">
+          <label for="filterprice">prix inférieur à : </label><input id="filterprice" v-model="priceFilter">
         </td>
         <td v-if="filterNameActive">
-          <label for="filtername">nom contient : </label><input v-model="nameFilter" id="filtername">
+          <label for="filtername">nom contient : </label><input id="filtername" v-model="nameFilter">
         </td>
         <td v-if="filterStockActive">
-          <label for="filterstock">en stock</label><input type="checkbox" v-model="stockFilter" id="filterstock">
+          <label for="filterstock">en stock</label><input id="filterstock" v-model="stockFilter" type="checkbox">
         </td>
       </tr>
     </table>
-    <hr />
+    <hr/>
 
     <!-- version avec filtre multi-critères -->
-    <CheckedList :data="filterViruses"
-                 item-amount
+    <CheckedList :checked="checked"
+                 :data="filterViruses"
                  :fields="['name', 'price']"
-                 item-check
                  :item-button="{show: true, text:'Add to cart'}"
                  :list-button="{show: true, text:'Add to cart'}"
-                 :checked="checked"
+                 item-amount
+                 item-check
                  @checked-changed="changeSelection($event)"
                  @item-button-clicked="addVirusToBasket($event)"
                  @list-button-clicked="addSelectedVirusesToBasket($event)"
@@ -41,8 +44,9 @@
 
 <script>
 
-import {mapState, mapActions} from 'vuex'
+import {mapActions, mapState} from 'vuex'
 import CheckedList from "@/components/CheckedList";
+
 export default {
   name: 'ItemsList',
   components: {CheckedList},
@@ -50,9 +54,9 @@ export default {
     priceFilter: 0,
     nameFilter: '',
     stockFilter: true,
-    filterPriceActive : false,
-    filterNameActive : false,
-    filterStockActive : false,
+    filterPriceActive: false,
+    filterNameActive: false,
+    filterStockActive: false,
     itemAmount: true,
     selected: []
   }),
@@ -66,8 +70,7 @@ export default {
         // if idx is in selected, push true, else push false
         if (this.selected.includes(idx)) {
           tab.push(true)
-        }
-        else {
+        } else {
           tab.push(false)
         }
       })
@@ -111,7 +114,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('shop', ['getAllViruses' , 'addItemBasket']),
+    ...mapActions('shop', ['getAllViruses', 'addItemBasket']),
     changeSelection(idx) {
       // get the virus in the filtered list
       let v = this.filterViruses[idx]
@@ -120,16 +123,15 @@ export default {
       // if i is in selected, remove it
       let j = this.selected.findIndex(el => el === i)
       if (j !== -1) {
-        this.selected.splice(j,1)
-      }
-      else {
+        this.selected.splice(j, 1)
+      } else {
         this.selected.push(i)
       }
     },
     addVirusToBasket(item) {
       let v;
       let q;
-      if(this.itemAmount) {
+      if (this.itemAmount) {
         v = this.filterViruses[item[0]];
         q = item[1];
       } else {
@@ -143,7 +145,7 @@ export default {
       items.forEach(item => {
         let v;
         let q;
-        if(this.itemAmount) {
+        if (this.itemAmount) {
           v = this.filterViruses[item[0]];
           q = item[1];
         } else {

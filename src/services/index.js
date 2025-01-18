@@ -11,4 +11,4 @@ function baseResponse(error, status, data) {
     return {error, status, data};
 }
 
-export { errorResponse, normalResponse };
+export {errorResponse, normalResponse};

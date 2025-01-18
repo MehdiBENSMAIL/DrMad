@@ -1,29 +1,29 @@
 <template>
   <div>
     <p v-for="(item, indexRow) in data" :key="indexRow">
-      <input type="checkbox"
-             v-if="itemCheck"
+      <input v-if="itemCheck"
              :checked="checked[indexRow]"
+             type="checkbox"
              @click="$emit('checked-changed', indexRow)"
       >
 
       <span v-for="(field, indexCol) in fields" :key="indexCol">
-        {{item[field]}}
+        {{ item[field] }}
       </span>
 
-      <input v-if="itemAmount" type="number" min="1" v-model.number="amounts[indexRow]">
+      <input v-if="itemAmount" v-model.number="amounts[indexRow]" min="1" type="number">
 
       <button v-if="itemButton && itemButton.show"
               color="grey"
               @click="handleItemButtonClick(indexRow)">
-        {{itemButton.text}}
+        {{ itemButton.text }}
       </button>
     </p>
 
     <button v-if="listButton && listButton.show"
             color="green"
             @click="handleItemsSelectButton">
-      {{listButton.text}}
+      {{ listButton.text }}
     </button>
   </div>
 </template>
@@ -40,7 +40,7 @@ export default {
     listButton: Object, // l'objet pour le bouton de liste
     itemAmount: Boolean, // s'il y a un montant d'items
   },
-  data : () => {
+  data: () => {
     return {
       amounts: [] // le tableau des montants d'items
     }
@@ -56,8 +56,8 @@ export default {
       }
     }
   },
-  methods : {
-      handleItemButtonClick(indexRow) {
+  methods: {
+    handleItemButtonClick(indexRow) {
       if (this.itemAmount) {
         // Si itemAmount est true, renvoie l'index et la valeur du champ numérique
         this.$emit('item-button-clicked', [indexRow, this.amounts[indexRow]]);
@@ -69,10 +69,10 @@ export default {
     handleItemsSelectButton() {
       let items = [];
 
-      if(this.itemCheck) {
-        for(let i=0; i<this.$props.data.length; i++) {
-          if(this.checked[i]) {
-            if(this.itemAmount) {
+      if (this.itemCheck) {
+        for (let i = 0; i < this.$props.data.length; i++) {
+          if (this.checked[i]) {
+            if (this.itemAmount) {
               items.push([i, this.amounts[i]]);
             } else {
               items.push(i);

@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import {mapActions, mapState} from 'vuex';
 
 export default {
   name: 'ShopLogin',
@@ -27,7 +27,7 @@ export default {
     ...mapActions('shop', ['shopLogin', 'getBasket']),
     async handleLogin() {
       this.errorMessage = '';
-      const response = await this.shopLogin({ login: this.login, password: this.password });
+      const response = await this.shopLogin({login: this.login, password: this.password});
 
       if (response && response.error !== 0) {
         this.errorMessage = response.data;

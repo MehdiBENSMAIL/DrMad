@@ -16,12 +16,13 @@ export default {
 </template>
 
 <style scoped>
-  .col {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  .itemList, .basketList {
-    width: 50%;
-  }
+.col {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.itemList, .basketList {
+  width: 50%;
+}
 </style>

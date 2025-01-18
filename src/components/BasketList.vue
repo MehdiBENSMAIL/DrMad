@@ -31,7 +31,7 @@ export default {
       let items = [];
       this.basket?.items.forEach(itemData => {
         for (const viruse of this.viruses) {
-          if(viruse._id === itemData.item) {
+          if (viruse._id === itemData.item) {
             items.push({'name': viruse.name, 'amount': itemData.amount});
             break;
           }
@@ -52,16 +52,16 @@ export default {
       const items = [];
       this.basket.items.forEach(itemData => {
         for (const viruse of this.viruses) {
-          if(viruse._id === itemData.item) {
+          if (viruse._id === itemData.item) {
             items.push({item: viruse, amount: itemData.amount});
             break;
           }
         }
       })
-      const response = await ShopService.addOrder({ userId: this.shopUser._id, items });
-      if(response.error === 0 && response.data.uuid) {
+      const response = await ShopService.addOrder({userId: this.shopUser._id, items});
+      if (response.error === 0 && response.data.uuid) {
         this.clear();
-        this.$router.push('/shop/pay/'+ response.data.uuid)
+        this.$router.push('/shop/pay/' + response.data.uuid)
       } else {
         console.log(response.data);
       }

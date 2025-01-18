@@ -4,11 +4,11 @@
       <tr>
         <td v-for="(link, index) in titles" :key="index" :style="{paddingRight: '10px'}">
           <button
-              @click="$emit('menu-clicked', index)"
               :style="{backgroundColor: link.color}"
               class="nav-button"
+              @click="$emit('menu-clicked', index)"
           >
-            {{link.text}}
+            {{ link.text }}
           </button>
         </td>
       </tr>
@@ -19,7 +19,7 @@
 <script>
 export default {
   name: "NavBar",
-  props: { titles: Array },
+  props: {titles: Array},
 }
 </script>
 
