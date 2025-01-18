@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import ShopView from '../views/ShopView.vue'
+import {routeControllers} from "@/router/controllers.router";
 
 Vue.use(VueRouter)
 
@@ -63,12 +64,22 @@ const router = new VueRouter({
     routes,
 })
 
-// Found this solution to prevent redundant navigation : https://stackoverflow.com/a/64480426/23296835
+// Solution trouvée pour supprimer la navigation redondante : https://stackoverflow.com/a/64480426/23296835
 const originalPush = router.push
 router.push = function push(location) {
     return originalPush.call(this, location).catch(err => {
         if (err.name !== 'NavigationDuplicated') throw err;
     })
 }
+
+// guard, permet d'intercepter des chemins pour faire des actions spécifiques
+router.beforeEach((to, from, next) => {
+    const controller = routeControllers[to.path];
+    if (controller) {
+        controller.handler(to, from, next);
+    } else {
+        next();
+    }
+});
 
 export default router
