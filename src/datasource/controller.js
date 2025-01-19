@@ -1,8 +1,8 @@
-import {bankaccounts, items, shopusers, transactions} from "@/datasource/data";
-import {v4 as uuidv4} from "uuid";
-import {compareSync} from "bcryptjs";
+import { bankaccounts, items, shopusers, transactions } from "@/datasource/data";
+import { v4 as uuidv4 } from "uuid";
+import { compareSync } from "bcryptjs";
 
-import {errorResponse, normalResponse} from "@/services";
+import { errorResponse, normalResponse } from "@/services";
 
 function shopLogin(data) {
     // Vérifier si le login et le mot de passe sont fournis
@@ -31,7 +31,7 @@ function shopLogin(data) {
 }
 
 function getAllViruses() {
-    return normalResponse({items})
+    return normalResponse({ items })
 }
 
 function getAccountAmount(number) {
@@ -39,7 +39,7 @@ function getAccountAmount(number) {
     let account = bankaccounts.find((a) => a.number === number);
     if (!account) return errorResponse('Numéro de compte bancaire incorrect')
 
-    return normalResponse({amount: account.amount})
+    return normalResponse({ amount: account.amount })
 }
 
 function getAccountTransactions(number) {
@@ -47,7 +47,7 @@ function getAccountTransactions(number) {
     let account = bankaccounts.find((a) => a.number === number);
     if (!account) return errorResponse('Numéro de compte bancaire incorrect')
 
-    return normalResponse({transactions: transactions.filter((t) => t.account === account._id) ?? ''});
+    return normalResponse({ transactions: transactions.filter((t) => t.account === account._id) ?? '' });
 }
 
 function setUserBasket(data) {
@@ -64,7 +64,7 @@ function getUserBasket(data) {
     const user = shopusers.find(e => e._id === data.userId);
     if (!user) return errorResponse('L\'utilisateur n\'existe pas')
 
-    return normalResponse({basket: user.basket ?? {items: []}});
+    return normalResponse({ basket: user.basket ?? { items: [] } });
 }
 
 function addOrder(data) {
@@ -84,7 +84,7 @@ function addOrder(data) {
             promotion: itemData.item.promotion,
             object: itemData.item.object,
         }
-        items.push({item, amount: itemData.amount});
+        items.push({ item, amount: itemData.amount });
 
         let bestPromo = 0;
         itemData.item.promotion.forEach(promotion => {
@@ -102,7 +102,7 @@ function addOrder(data) {
     const uuid = uuidv4();
     let orderData = {
         items,
-        date: {"$date": new Date().toISOString()},
+        date: { "$date": new Date().toISOString() },
         total: totalPrice,
         status: 'waiting_payment',
         _id: uuid,
@@ -111,7 +111,7 @@ function addOrder(data) {
     if (!user.orders) user.orders = [];
     user.orders.push(orderData);
 
-    return normalResponse({uuid})
+    return normalResponse({ uuid })
 }
 
 function checkOrderExist(data) {
@@ -127,13 +127,13 @@ function checkOrderExist(data) {
         finalise = order.status === 'finalized';
     }
 
-    return normalResponse({exist, finalise})
+    return normalResponse({ exist, finalise })
 }
 
 function getAllOrders(data) {
     let user = shopusers.find(e => e._id === data.userId)
     if (!user) return errorResponse('L\'utilisateur n\'existe pas')
-    return normalResponse({orders: user.orders ?? []})
+    return normalResponse({ orders: user.orders ?? [] })
 }
 
 function updateOrder(data, status) {
@@ -158,6 +158,76 @@ function cancelOrder(data) {
     return updateOrder(data, 'cancelled')
 }
 
+// TP 5 partie 2
+function getAccount(data) {
+    let account = bankaccounts.find(e => e.number === data.number);
+    if (!account) { return errorResponse('Numéro de compte invalide') }
+
+    return normalResponse({ account });
+}
+
+function getTransactions(data) {
+    let transactions = transactions.filter(e => e._id === data);
+    if (!transactions) { return errorResponse('Aucune transaction pour ce compte') }
+
+    return normalResponse({ transactions });
+}
+
+function createWithdraw(data) {
+    let account = bankaccounts.find(e => e._id === data.idAccount);
+    if (!account) { return errorResponse('id de compte invalide') }
+
+    if (data.amount <= 0 || data.amount > account.amount) {
+        return errorResponse('Montant invalide/solde insuffisant.')
+    }
+
+    let transaction = {
+        "_id": uuidv4(),
+        "amount": -data.amount,
+        "account": account._id,
+        "date": { "$date": new Date().toISOString() },
+        "uuid": uuidv4()
+    }
+
+    account.amount -= data.amount;
+    transactions.push(transaction);
+
+    return normalResponse({ uuid: transaction.uuid, amount: account.amount })
+}
+
+function createPayment(data) {
+    let senderAccount = bankaccounts.find(e => e._id === data.idAccount)
+    let receiverAccount = bankaccounts.find(e => e.number === data.destNumber)
+
+    if (!senderAccount || !receiverAccount) { return errorResponse('id/numéro de compte invalide') }
+
+    if (data.amount <= 0 || data.amount > senderAccount.amount) {
+        return errorResponse('Montant invalide/solde insuffisant.')
+    }
+
+    let senderTransaction = {
+        "_id": uuidv4(),
+        "amount": -data.amount,
+        "destination": receiverAccount._id,
+        "account": senderAccount._id,
+        "date": { "$date": new Date().toISOString() },
+        "uuid": uuidv4()
+    }
+
+    let receiverTransaction = {
+        "_id": uuidv4(),
+        "amount": data.amount,
+        "account": receiverAccount._id,
+        "date": senderTransaction.date,
+        "uuid": uuidv4()
+    }
+
+    senderAccount.amount -= data.amount;
+    receiverAccount.amount += data.amount;
+    transactions.push([senderTransaction, receiverTransaction]);
+
+    return normalResponse({ uuid: receiverTransaction.uuid, amount: receiverAccount.amount })
+}
 
 export default {
     shopLogin,
@@ -170,5 +240,9 @@ export default {
     checkOrderExist,
     finaliseOrder,
     getAllOrders,
-    cancelOrder
+    cancelOrder,
+    getAccount,
+    getTransactions,
+    createWithdraw,
+    createPayment
 }
