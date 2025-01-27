@@ -1,22 +1,32 @@
 <template>
     <div>
-        <NavBar :links="links">
-            <template>
-                <button>{{ label }}</button>
-            </template>
-        </NavBar>
+        <h1>Banque</h1>
+        <hr>
 
-        <VerticalMenu class="fixed-navbar" :items="itemsMenu">
-            <template v-slot:menu-title="{ label }">
+        <NavBar :items="links" />
+        <div class="main-container">
+            <VerticalMenu class="fixed-navbar" :items="itemsMenu">
+              <template v-slot:menu-title="{ label }">
                 <strong><u>{{ label }}</u></strong>
-            </template>
-            <template v-slot:menu-link="{ label }">
-                <span>{{ label }}</span>
-            </template>
-        </VerticalMenu>
+              </template>
+            </VerticalMenu>
 
-        <div>
-            <router-view name="bankmain" />
+            <router-view name="bankmain">
+              <template v-slot:account-amount="{ amount }">
+                <div class="custom-amount">
+                  solde actuel: <input
+                    :value="`${amount} €`"
+                    readonly
+                    :class="{
+                                'negative': amount < 0,
+                                'positive': amount >= 0
+                            }"
+                />
+                </div>
+              </template>
+            </router-view>
+
+          <div class="a-remplacer">Déconnexion</div>
         </div>
     </div>
 </template>
@@ -57,8 +67,22 @@ export default {
 }
 </script>
 
-<style scoped>
-.fixed-navbar {
-    position: fixed;
+<style>
+.main-container {
+  display: flex;
+  flex-direction: row;
+  gap: 100px;
+}
+
+.main-container > div:last-child {
+  margin-left: auto;
+}
+
+.negative {
+  color: red;
+}
+
+.positive {
+  color: green;
 }
 </style>
