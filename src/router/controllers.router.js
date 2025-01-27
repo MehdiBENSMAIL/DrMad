@@ -3,9 +3,8 @@ import router from "@/router/index";
 
 const routeControllers = {
     '/shop/logout': {
-        handler: async (to, from, next) => {
+        handler: async () => {
             await store.dispatch('shop/shopLogout');
-            await next();
             await router.push('/shop/login');
         }
     },
