@@ -136,7 +136,7 @@ function getAllOrders(data) {
     return normalResponse({ orders: user.orders ?? [] })
 }
 
-function updateOrder(data, status) {
+function finaliseOrder(data) {
     let user = shopusers.find(e => e._id === data.userId)
     if (!user) return errorResponse('L\'utilisateur n\'existe pas')
 
@@ -146,20 +146,28 @@ function updateOrder(data, status) {
     if (order.status !== 'waiting_payment')
         return errorResponse('La commande n\'est pas en attente de payement')
 
-    order.status = status
+    let transaction = transactions.find(e => e._id === data.transactionId)
+    if(!transaction) return errorResponse('La transaction n\'existe pas')
+    if(transaction.amount >= 0) return errorResponse('La transaction amout >= 0')
+    if(-transaction.amount >= order.total)
+    if(transaction.destination !== data.userId) return errorResponse('Cette transaction n\'est pas associé à ce compte')
+
+    order.status = 'finalized'
     return normalResponse()
 }
 
-function finaliseOrder(data) {
-    // FIXME : être sur du code de vérification de la transaction
-    let transaction = transactions.find(e => e._id === data.transactionId)
-    if(!transaction) return errorResponse('La transaction n\'existe pas')
-
-    return updateOrder(data, 'finalized')
-}
-
 function cancelOrder(data) {
-    return updateOrder(data, 'cancelled')
+    let user = shopusers.find(e => e._id === data.userId)
+    if (!user) return errorResponse('L\'utilisateur n\'existe pas')
+
+    let order = user.orders?.find(e => e._id === data.orderId) ?? false
+    if (!order) return errorResponse('La commande n\'existe pas')
+
+    if (order.status !== 'waiting_payment')
+        return errorResponse('La commande n\'est pas en attente de payement')
+
+    order.status = 'cancelled'
+    return normalResponse()
 }
 
 // TP 5 partie 2
