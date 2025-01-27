@@ -3,30 +3,29 @@
         <h1>Banque</h1>
         <hr>
 
-        <NavBar :items="links" />
         <div class="main-container">
             <VerticalMenu class="fixed-navbar" :items="itemsMenu">
-              <template v-slot:menu-title="{ label }">
-                <strong><u>{{ label }}</u></strong>
-              </template>
+                <template v-slot:menu-title="{ label }">
+                    <strong><u>{{ label }}</u></strong>
+                </template>
             </VerticalMenu>
 
             <router-view name="bankmain">
-              <template v-slot:account-amount="{ amount }">
-                <div class="custom-amount">
-                  solde actuel: <input
-                    :value="`${amount} €`"
-                    readonly
-                    :class="{
-                                'negative': amount < 0,
-                                'positive': amount >= 0
-                            }"
-                />
-                </div>
-              </template>
+                <template v-slot:account-amount="{ amount }">
+                    <div class="custom-amount">
+                        solde actuel: <input :value="`${amount} €`" readonly :class="{
+                            'negative': amount < 0,
+                            'positive': amount >= 0
+                        }" />
+                    </div>
+                </template>
             </router-view>
 
-          <div class="a-remplacer">Déconnexion</div>
+            <NavBar :links="accountLink">
+                <template>
+                    <button>{{ label }}</button>
+                </template>
+            </NavBar>
         </div>
     </div>
 </template>
@@ -47,7 +46,7 @@ export default {
             balance: state => state.bank.accountNumber.amount,
             account: state => state.bank.accountNumber,
         }),
-        links() {
+        accountLink() {
             return [
                 { label: "Mon compte", to: "/bank/account" },
             ];
@@ -69,20 +68,20 @@ export default {
 
 <style>
 .main-container {
-  display: flex;
-  flex-direction: row;
-  gap: 100px;
+    display: flex;
+    flex-direction: row;
+    gap: 100px;
 }
 
-.main-container > div:last-child {
-  margin-left: auto;
+.main-container>div:last-child {
+    margin-left: auto;
 }
 
 .negative {
-  color: red;
+    color: red;
 }
 
 .positive {
-  color: green;
+    color: green;
 }
 </style>
