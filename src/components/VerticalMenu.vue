@@ -42,14 +42,7 @@ export default {
 
 .menu-link {
   cursor: pointer;
+  padding-left: 10px;
 }
 
-.menu-link button {
-  width: 100%;
-  text-align: left;
-  padding: 8px;
-  border: none;
-  background: none;
-  cursor: pointer;
-}
 </style>
