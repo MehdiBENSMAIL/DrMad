@@ -151,6 +151,10 @@ function updateOrder(data, status) {
 }
 
 function finaliseOrder(data) {
+    // FIXME : être sur du code de vérification de la transaction
+    let transaction = transactions.find(e => e._id === data.transactionId)
+    if(!transaction) return errorResponse('La transaction n\'existe pas')
+
     return updateOrder(data, 'finalized')
 }
 

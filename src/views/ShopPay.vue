@@ -46,7 +46,7 @@ export default {
     },
     async payOrder() {
       if (!this.orderExist || this.isAlreadyPayed) return;
-      const response = await ShopService.finaliseOrder({userId: this.shopUser._id, orderId: this.orderId});
+      const response = await ShopService.finaliseOrder({userId: this.shopUser._id, orderId: this.orderId, transactionId: this.transactionId});
       if (response.error === 0) {
         this.$router.push('/shop/orders')
       } else {
