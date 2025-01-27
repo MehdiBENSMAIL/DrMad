@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import ShopView from '../views/ShopView.vue'
+import BankView from '../views/BankView.vue'
 import {routeControllers} from "@/router/controllers.router";
 
 Vue.use(VueRouter)
@@ -52,11 +53,55 @@ const routes = [
         ]
     },
     {
-        path: '/bank/account',
-        name: 'bankaccount',
-        component: () => import('../views/BankAccountView.vue')
+        path: '/bank',
+        component: BankView,
+        children: [
+            {
+                path: 'home',
+                name: 'bankhome',
+                components: {
+                    bankmain: () => import('../views/BankHome.vue')
+                },
+                alias: '/bank'
+            },
+            {
+                path: 'account',
+                name: 'bankaccount',
+                components: {
+                    bankmain: () => import('../views/BankAccount.vue')
+                }
+            },
+            {
+                path: 'amount',
+                name: 'bankamount',
+                components: {
+                    bankmain: () => import('../views/BankAmount.vue')
+                }
+            },
+            {
+                path: 'operation',
+                name: 'bankoperation',
+                components: {
+                    bankmain: () => import('../views/BankOperation.vue')
+                }
+            },
+            {
+                path: 'history',
+                name: 'bankhistory',
+                components: {
+                    bankmain: () => import('../views/BankHistory.vue')
+                }
+            },
+            {
+                path: 'logout',
+                name: 'banklogout',
+                components: {
+                    bankmain: () => import('../views/BankLogout.vue')
+                }
+            }
+        ]
     }
-]
+];
 
 const router = new VueRouter({
     mode: 'history',
