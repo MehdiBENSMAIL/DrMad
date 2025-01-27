@@ -6,6 +6,7 @@ export default {
         accountAmount: 0,
         accountTransactions: [],
         accountNumberError: 0,
+        account: null
     }),
     mutations: {
         updateAccountAmount(state, amount) {
@@ -16,6 +17,9 @@ export default {
         },
         updateAccountNumberError(state, error) {
             state.accountNumberError = error
+        },
+        updateAccount(state, number) {
+            state.account = number;
         }
     },
     actions: {
@@ -39,6 +43,28 @@ export default {
             } else {
                 console.log(response.data)
                 commit('updateAccountNumberError', -1)
+            }
+        },
+        async getAccount({commit}, number) {
+            console.log('get account transactions');
+            let response = await BankAccountService.getAccountTransactions(number)
+            if (response.error === 0) {
+                commit('updateAccountTransactions', response.data.transactions)
+                commit('updateAccountNumberError', 1)
+            } else {
+                console.log(response.data)
+                commit('updateAccountNumberError', -1)
+            }
+        },
+        async createWithdraw({commit}, number) {
+            console.log('create withdraw');
+            let response = await BankAccountService.createWithdraw(number);
+            if (response.error === 0) {
+                commit('updateAccountTransactions', response.data.transaction);
+                commit('updateAccountAmount', response.accountAmount - response.data.amount);
+            } else {
+                console.log(response.data)
+                commit('createWithdrawError', -1)
             }
         },
     }
