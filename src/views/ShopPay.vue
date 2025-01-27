@@ -10,7 +10,7 @@
     </div>
     <div v-if="orderExist">
       <hr>
-      <div >date :</div>
+      <div>date: {{detail.date}}, total: {{detail.total}}</div>
       <hr>
       <label>
         uuid transaction :
@@ -33,6 +33,7 @@ export default {
       searchOrderId: '',
       transactionId: '',
       orderExist: false,
+      detail: null,
       isAlreadyPayed: false,
     };
   },
@@ -56,9 +57,13 @@ export default {
     async checkOrder() {
       const response = await ShopService.checkOrderExist({userId: this.shopUser._id, orderId: this.orderId});
       if (response.error === 0) {
-        // FIXME renvoyer la commande directement et faire les verifs des datas de la commande ici
         this.orderExist = response.data.exist;
-        this.isAlreadyPayed = (this.orderExist) ? response.data.finalise : false;
+        if(this.orderExist) {
+          this.isAlreadyPayed = response.data.finalise;
+          this.detail = response.data.detail;
+        } else {
+          this.isAlreadyPayed = false;
+        }
       } else {
         console.log(response.data);
       }

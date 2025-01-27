@@ -120,14 +120,15 @@ function checkOrderExist(data) {
 
     const order = user.orders?.find(e => e._id === data.orderId)
     let exist = false;
-    let finalise;
+    let finalise, detail;
 
     if (order) {
         exist = true;
         finalise = order.status === 'finalized';
+        detail = {date: order.date, total: order.total};
     }
 
-    return normalResponse({ exist, finalise })
+    return normalResponse({ exist, finalise, detail })
 }
 
 function getAllOrders(data) {
@@ -149,7 +150,7 @@ function finaliseOrder(data) {
     let transaction = transactions.find(e => e._id === data.transactionId)
     if(!transaction) return errorResponse('La transaction n\'existe pas')
     if(transaction.amount >= 0) return errorResponse('La transaction amout >= 0')
-    if(-transaction.amount >= order.total)
+    if(-transaction.amount < order.total) return errorResponse('Le prix de la commande est trop élevé')
     if(transaction.destination !== data.userId) return errorResponse('Cette transaction n\'est pas associé à ce compte')
 
     order.status = 'finalized'
