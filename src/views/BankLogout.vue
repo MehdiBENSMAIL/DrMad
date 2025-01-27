@@ -13,7 +13,11 @@ export default {
     methods: {
         ...mapActions('bank', ['bankLogout']),
         logout() {
-            //TODO
+            this.logout;
+            setTimeout(() => {
+                this.clearAccount();
+                this.$router.push("/bank");
+            }, 1000);
         }
     }
 };

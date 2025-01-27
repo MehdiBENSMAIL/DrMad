@@ -1,6 +1,10 @@
 <template>
     <div>
-        <NavBar :items="links" />
+        <NavBar :links="links">
+            <template>
+                <button>{{ label }}</button>
+            </template>
+        </NavBar>
 
         <VerticalMenu class="fixed-navbar" :items="itemsMenu">
             <template v-slot:menu-title="{ label }">
