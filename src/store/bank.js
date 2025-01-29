@@ -1,4 +1,4 @@
-import BankAccountService from '../services/bankaccount.service'
+import BankService from "@/services/bank.service";
 
 export default {
     namespaced: true,
@@ -25,7 +25,7 @@ export default {
     actions: {
         async getAccountAmount({ commit }, number) {
             console.log('get account amount');
-            let response = await BankAccountService.getAccountAmount(number)
+            let response = await BankService.getAccountAmount(number)
             if (response.error === 0) {
                 commit('updateAccountAmount', response.data.amount)
                 commit('updateAccountNumberError', 1)
@@ -36,7 +36,7 @@ export default {
         },
         async getAccountTransactions({ commit }, number) {
             console.log('get account transactions');
-            let response = await BankAccountService.getAccountTransactions(number)
+            let response = await BankService.getAccountTransactions(number)
             if (response.error === 0) {
                 commit('updateAccountTransactions', response.data.transactions)
                 commit('updateAccountNumberError', 1)
@@ -47,7 +47,7 @@ export default {
         },
         async getAccount({ commit }, number) {
             console.log('get account');
-            let response = await BankAccountService.getAccount(number)
+            let response = await BankService.getAccount(number)
             if (response.error === 0) {
                 commit('updateAccount', response.data)
             } else {
@@ -57,7 +57,7 @@ export default {
         },
         async createWithdraw({ commit }, number) {
             console.log('create withdraw');
-            let response = await BankAccountService.createWithdraw(number);
+            let response = await BankService.createWithdraw(number);
             if (response.error === 0) {
                 commit('updateAccountTransactions', response.data.transaction);
                 commit('updateAccountAmount', response.accountAmount - response.data.amount);
@@ -65,6 +65,18 @@ export default {
                 console.log(response.data)
                 commit('createWithdrawError', -1)
             }
+        },
+        async bankLogin({ commit }, data) {
+            console.log('handle login');
+            const response = await BankService.bankLogin(data.login);
+
+            if (response.error === 0) {
+                commit('updateAccount', response.data.account);
+            } else {
+                console.log(response.data);
+            }
+
+            return response;
         },
         async bankLogout({ commit }) {
             commit('updateAccount', null);

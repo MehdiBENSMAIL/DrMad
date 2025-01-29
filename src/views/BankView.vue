@@ -21,17 +21,13 @@
                 </template>
             </router-view>
 
-            <NavBar :links="accountLink">
-                <template>
-                    <button>{{ accountLink.label }}</button>
-                </template>
-            </NavBar>
+            <NavBar :links="accountLink"/>
         </div>
     </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import {mapState} from 'vuex';
 import NavBar from '@/components/NavBar.vue';
 import VerticalMenu from '../components/VerticalMenu.vue';
 
@@ -42,16 +38,12 @@ export default {
         VerticalMenu
     },
     computed: {
-        ...mapState({
-            balance: state => state.bank.accountNumber.amount,
-            account: state => state.bank.accountNumber,
-        }),
+        ...mapState('bank', ['account']),
         accountLink() {
-            if(this.account) {
-                return [{ label: "Déconnexion", to: "/bank/logout" }]
-            } else {
-                return [{ label: "Mon compte", to: "/bank/account" }]
-            }
+            return [ this.account
+                ? { label: "Déconnexion", to: "/bank/logout" }
+                : { label: "Mon compte", to: "/bank/account" }
+            ]
         },
     },
     data() {

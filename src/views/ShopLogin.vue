@@ -31,6 +31,7 @@ export default {
 
       if (response && response.error !== 0) {
         this.errorMessage = response.data;
+        console.log(this.errorMessage);
         return;
       }
       await this.$router.push('/shop/buy')

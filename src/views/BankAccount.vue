@@ -10,8 +10,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import bankaccount from '../services/bankaccount.service'
+import {mapActions, mapState} from 'vuex';
 
 export default {
     name: 'BankAccount',
@@ -20,18 +19,19 @@ export default {
         errorMessage: ''
     }),
     computed: {
-        ...mapState('bank', 'account'),
+        ...mapState('bank', ['account']),
     },
     methods: {
+      ...mapActions('bank', ['bankLogin']),
         async handleLogin() {
             this.errorMessage = '';
-            const response = await bankaccount.bankLogin(this.login);
+            const response = await this.bankLogin({login: this.login});
 
             if (response && response.error !== 0) {
                 this.errorMessage = response.data;
                 return;
             }
-            this.account = this.login;
+
             await this.$router.push('/bank')
         },
     },
