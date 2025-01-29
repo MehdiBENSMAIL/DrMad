@@ -3,6 +3,10 @@ import {errorResponse} from "@/services/index";
 
 // Fonctions secondaires
 
+async function bankLoginFromLocalSource(data) {
+    return LocalSource.bankLogin(data)
+}
+
 async function getAccountAmountFromLocalSource(number) {
     return LocalSource.getAccountAmount(number)
 }
@@ -89,11 +93,22 @@ async function createPayment(number) {
     return response;
 }
 
+async function bankLogin(account) {
+    let response
+    try {
+        response = await bankLoginFromLocalSource(account);
+    } catch (err) {
+        response = errorResponse('erreur réseau, impossible de se connecter à la banque.');
+    }
+    return response;
+}
+
 export default {
     getAccountAmount,
     getAccountTransactions,
     getAccount,
     getTransactions,
     createWithdraw,
-    createPayment
+    createPayment,
+    bankLogin
 }

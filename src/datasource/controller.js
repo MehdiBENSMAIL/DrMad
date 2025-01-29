@@ -30,6 +30,25 @@ function shopLogin(data) {
     })
 }
 
+function bankLogin(account) {
+    console.log("trying to connect");
+    if (!account) return errorResponse('Aucun login fourni');
+
+    let user = bankaccounts.find((e) => e.number === account);
+    console.log(user);
+
+    if (!user) return errorResponse('Login incorrect');
+    console.log("je suis là")
+    this.account = user.number;
+    return normalResponse({
+        account: {
+            _id: user._id,
+            number: user.number,
+            amount: user.amount
+        }
+    })
+}
+
 function getAllViruses() {
     return normalResponse({ items })
 }
@@ -125,7 +144,7 @@ function checkOrderExist(data) {
     if (order) {
         exist = true;
         finalise = order.status === 'finalized';
-        detail = {date: order.date, total: order.total};
+        detail = { date: order.date, total: order.total };
     }
 
     return normalResponse({ exist, finalise, detail })
@@ -148,10 +167,10 @@ function finaliseOrder(data) {
         return errorResponse('La commande n\'est pas en attente de payement')
 
     let transaction = transactions.find(e => e._id === data.transactionId)
-    if(!transaction) return errorResponse('La transaction n\'existe pas')
-    if(transaction.amount >= 0) return errorResponse('La transaction amout >= 0')
-    if(-transaction.amount < order.total) return errorResponse('Le prix de la commande est trop élevé')
-    if(transaction.destination !== data.userId) return errorResponse('Cette transaction n\'est pas associé à ce compte')
+    if (!transaction) return errorResponse('La transaction n\'existe pas')
+    if (transaction.amount >= 0) return errorResponse('La transaction amout >= 0')
+    if (-transaction.amount < order.total) return errorResponse('Le prix de la commande est trop élevé')
+    if (transaction.destination !== data.userId) return errorResponse('Cette transaction n\'est pas associé à ce compte')
 
     order.status = 'finalized'
     return normalResponse()
@@ -257,5 +276,6 @@ export default {
     getAccount,
     getTransactions,
     createWithdraw,
-    createPayment
+    createPayment,
+    bankLogin
 }

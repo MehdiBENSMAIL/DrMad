@@ -23,7 +23,7 @@
 
             <NavBar :links="accountLink">
                 <template>
-                    <button>{{ label }}</button>
+                    <button>{{ accountLink.label }}</button>
                 </template>
             </NavBar>
         </div>
@@ -47,9 +47,11 @@ export default {
             account: state => state.bank.accountNumber,
         }),
         accountLink() {
-            return [
-                { label: "Mon compte", to: "/bank/account" },
-            ];
+            if(this.account) {
+                return [{ label: "Déconnexion", to: "/bank/logout" }]
+            } else {
+                return [{ label: "Mon compte", to: "/bank/account" }]
+            }
         },
     },
     data() {

@@ -13,7 +13,7 @@ export default {
             state.accountAmount = amount
         },
         updateAccountTransactions(state, transactions) {
-            state.accountTransactions = transactions
+            state.accountTransactions  = transactions
         },
         updateAccountNumberError(state, error) {
             state.accountNumberError = error
@@ -23,7 +23,7 @@ export default {
         }
     },
     actions: {
-        async getAccountAmount({commit}, number) {
+        async getAccountAmount({ commit }, number) {
             console.log('get account amount');
             let response = await BankAccountService.getAccountAmount(number)
             if (response.error === 0) {
@@ -34,7 +34,7 @@ export default {
                 commit('updateAccountNumberError', -1)
             }
         },
-        async getAccountTransactions({commit}, number) {
+        async getAccountTransactions({ commit }, number) {
             console.log('get account transactions');
             let response = await BankAccountService.getAccountTransactions(number)
             if (response.error === 0) {
@@ -45,18 +45,17 @@ export default {
                 commit('updateAccountNumberError', -1)
             }
         },
-        async getAccount({commit}, number) {
-            console.log('get account transactions');
-            let response = await BankAccountService.getAccountTransactions(number)
+        async getAccount({ commit }, number) {
+            console.log('get account');
+            let response = await BankAccountService.getAccount(number)
             if (response.error === 0) {
-                commit('updateAccountTransactions', response.data.transactions)
-                commit('updateAccountNumberError', 1)
+                commit('updateAccount', response.data)
             } else {
                 console.log(response.data)
                 commit('updateAccountNumberError', -1)
             }
         },
-        async createWithdraw({commit}, number) {
+        async createWithdraw({ commit }, number) {
             console.log('create withdraw');
             let response = await BankAccountService.createWithdraw(number);
             if (response.error === 0) {
@@ -67,5 +66,11 @@ export default {
                 commit('createWithdrawError', -1)
             }
         },
-    }
+        async bankLogout({ commit }) {
+            commit('updateAccount', null);
+            commit('updateAccountAmount', 0);
+        },
+    },
+    getters: { account: (state) => state.account, },
+
 }

@@ -109,7 +109,7 @@ const router = new VueRouter({
     routes,
 })
 
-// Solution trouvée pour supprimer la navigation redondante : https://stackoverflow.com/a/64480426/23296835
+// Solution trouvée pour supprimer l'alerte de navigation redondante : https://stackoverflow.com/a/64480426/23296835
 const originalPush = router.push
 router.push = function push(location) {
     return originalPush.call(this, location).catch(err => {

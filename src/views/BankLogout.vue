@@ -1,7 +1,6 @@
 <template>
-    <div class="logout-wrapper">
+    <div>
         <h2>Déconnexion</h2>
-        <div class="spinner"></div>
     </div>
 </template>
 
@@ -10,12 +9,14 @@ import { mapActions } from 'vuex';
 
 export default {
     name: 'BankLogout',
+    created() {
+        this.logout();
+    },
     methods: {
         ...mapActions('bank', ['bankLogout']),
         logout() {
-            this.logout;
+            this.bankLogout();
             setTimeout(() => {
-                this.clearAccount();
                 this.$router.push("/bank");
             }, 1000);
         }
