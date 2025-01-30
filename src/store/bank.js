@@ -10,13 +10,13 @@ export default {
     }),
     mutations: {
         updateAccountAmount(state, amount) {
-            state.accountAmount = amount
+            state.accountAmount = amount;
         },
         updateAccountTransactions(state, transactions) {
-            state.accountTransactions = transactions
+            state.accountTransactions = transactions;
         },
         updateAccountNumberError(state, error) {
-            state.accountNumberError = error
+            state.accountNumberError = error;
         },
         updateAccount(state, number) {
             state.account = number;
@@ -25,45 +25,56 @@ export default {
     actions: {
         async getAccountAmount({ commit }, number) {
             console.log('get account amount');
-            let response = await BankService.getAccountAmount(number)
+            let response = await BankService.getAccountAmount(number);
             if (response.error === 0) {
-                commit('updateAccountAmount', response.data.amount)
-                commit('updateAccountNumberError', 1)
+                commit('updateAccountAmount', response.data.amount);
+                commit('updateAccountNumberError', 1);
             } else {
-                console.log(response.data)
-                commit('updateAccountNumberError', -1)
+                console.log(response.data);
+                commit('updateAccountNumberError', -1);
             }
         },
         async getAccountTransactions({ commit }, number) {
             console.log('get account transactions');
-            let response = await BankService.getAccountTransactions(number)
+            let response = await BankService.getAccountTransactions(number);
             if (response.error === 0) {
-                commit('updateAccountTransactions', response.data.transactions)
-                commit('updateAccountNumberError', 1)
+                commit('updateAccountTransactions', response.data.transactions);
+                commit('updateAccountNumberError', 1);
             } else {
-                console.log(response.data)
-                commit('updateAccountNumberError', -1)
+                console.log(response.data);
+                commit('updateAccountNumberError', -1);
             }
         },
         async getAccount({ commit }, number) {
             console.log('get account');
-            let response = await BankService.getAccount(number)
+            let response = await BankService.getAccount(number);
             if (response.error === 0) {
-                commit('updateAccount', response.data)
+                commit('updateAccount', response.data);
             } else {
-                console.log(response.data)
-                commit('updateAccountNumberError', -1)
+                console.log(response.data);
+                commit('updateAccountNumberError', -1);
             }
         },
-        async createWithdraw({ commit }, number) {
+        async createWithdraw({ commit, state }, data) {
             console.log('create withdraw');
-            let response = await BankService.createWithdraw(number);
+            let response = await BankService.createWithdraw(data);
             if (response.error === 0) {
-                commit('updateAccountTransactions', response.data.transaction);
-                commit('updateAccountAmount', response.accountAmount - response.data.amount);
+                commit('updateAccountTransactions', [...state.accountTransactions, response.data.transaction]);
+                commit('updateAccountAmount', response.data.amount); // Nouveau solde
             } else {
-                console.log(response.data)
-                commit('createWithdrawError', -1)
+                console.log(response.data);
+                commit('updateAccountNumberError', -1);
+            }
+        },
+        async createPayment({ commit, state }, data) {
+            console.log('create Payment');
+            let response = await BankService.createPayment(data);
+            if (response.error === 0) {
+                commit('updateAccountTransactions', [...state.accountTransactions, ...response.data.transactions]);
+                commit('updateAccountAmount', response.data.amount); // Nouveau solde
+            } else {
+                console.log(response.data);
+                commit('updateAccountNumberError', -1);
             }
         },
         async bankLogin({ commit, dispatch }, data) {
@@ -79,13 +90,15 @@ export default {
             }
             return response;
         },
-
         async bankLogout({ commit }) {
             commit('updateAccount', null);
             commit('updateAccountAmount', 0);
             commit('updateAccountTransactions', []);
-        },
+        }
     },
-    getters: { account: (state) => state.account, },
-
-}
+    getters: {
+        account: (state) => state.account,
+        accountAmount: (state) => state.accountAmount,
+        accountTransactions: (state) => state.accountTransactions,
+    }
+};

@@ -20,14 +20,13 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapState } from 'vuex';
 import { bankaccounts } from "../datasource/data";
 
 export default {
     name: 'BankOperation',
     data() {
         return {
-
             amount: 0,
             destAcc: "",
             dest: false,
@@ -35,11 +34,17 @@ export default {
         };
     },
     computed: {
-        ...mapState('bank', ['bankAccount'])
+        ...mapState('bank', {
+            bankAccount: (state) => state.account,
+        }),
     },
     methods: {
-        ...mapActions('bank', ['createPayment', 'createWithdraw', 'getAccountTransactions']),
         async validate() {
+            if (!this.bankAccount) {
+                alert("Vous devez être connecté pour effectuer cette opération.");
+                return;
+            }
+
             try {
                 if (this.amount <= 0) {
                     alert("Montant invalide");
@@ -53,20 +58,22 @@ export default {
                         alert('Compte non trouvé');
                         return;
                     }
-                    res = await this.createPayment({
+                    res = await this.$store.dispatch('bank/createPayment', {
                         amount: this.amount,
                         destAcc: destAcc._id,
-                        number: this.bankAccount._id
+                        number: this.bankAccount.number
                     });
-
                 } else {
-                    res = await this.createWithdraw({ number: this.bankAccount._id, amount: this.amount });
+                    res = await this.$store.dispatch('bank/createWithdraw', {
+                        number: this.bankAccount.number,
+                        amount: this.amount
+                    });
                 }
 
-                if (res === 0) {
+                if (res.error === 0) {
                     alert(`Erreur: ${res.data}`);
                 } else {
-                    this.message = `L'opération est validée avec le n° : ${res.data.transaction.uuid}. Vous pouvez la retrouver dans l'historique.`;
+                    this.message = `L'opération est validée avec le n° : ${res.data.uuid}. Vous pouvez la retrouver dans l'historique.`;
                     setTimeout(() => {
                         this.message = '';
                     }, 5000);
@@ -77,7 +84,9 @@ export default {
         }
     },
     mounted() {
-        this.getAccountTransactions();
+        if (!this.bankAccount) {
+            this.$router.push('/bank/login');
+        }
     }
 };
 </script>
