@@ -27,6 +27,7 @@ export default {
     name: 'BankOperation',
     data() {
         return {
+
             amount: 0,
             destAcc: "",
             dest: false,

@@ -32,13 +32,11 @@ function shopLogin(data) {
 
 function bankLogin(account) {
     console.log("trying to connect");
-    if (!account) return errorResponse('Aucun login fourni');
+    if (!account) return errorResponse('Aucun numéro fourni');
 
     let user = bankaccounts.find((e) => e.number === account);
-    console.log(user);
 
-    if (!user) return errorResponse('Login incorrect');
-    console.log("je suis là")
+    if (!user) return errorResponse('Numéro incorrect');
     this.account = user.number;
     return normalResponse({
         account: {

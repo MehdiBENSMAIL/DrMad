@@ -32,7 +32,7 @@ export default {
                 return;
             }
 
-            await this.$router.push('/bank')
+            await this.$router.push('/bank/amount')
         },
     },
 };
