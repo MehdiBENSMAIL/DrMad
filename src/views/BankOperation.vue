@@ -70,13 +70,17 @@ export default {
                     });
                 }
 
+                if (!res) {
+                    throw new Error("Aucune réponse reçue du serveur");
+                }
+
                 if (res.error === 0) {
-                    alert(`Erreur: ${res.data}`);
-                } else {
                     this.message = `L'opération est validée avec le n° : ${res.data.uuid}. Vous pouvez la retrouver dans l'historique.`;
                     setTimeout(() => {
                         this.message = '';
                     }, 5000);
+                } else {
+                    alert(`Erreur: ${res.data}`);
                 }
             } catch (error) {
                 alert(`Une erreur s'est produite lors de l'opération : ${error.message}`);

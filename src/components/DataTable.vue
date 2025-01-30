@@ -14,18 +14,22 @@
                         <input type="checkbox" v-model="selectedItems" :value="item" />
                     </td>
                     <td v-for="header in headers" :key="header.name">
-                        <span :class="item[header.name + 'Class']">{{ item[header.name] }}</span>
+                        <span v-if="header.name === 'amount'"
+                            :class="{ negative: item.amount < 0, positive: item.amount >= 0 }">
+                            {{ item[header.name] }}
+                        </span>
+                        <span v-else>
+                            {{ item[header.name] }}
+                        </span>
                     </td>
                     <td v-if="itemButton">
-                        <slot name="item-button" :label="'Détails'" :item="item">
-                            <button @click="emitItemClicked(item)">Détails</button>
-                        </slot>
+                        <slot name="item-button" :item="item"></slot>
                     </td>
                 </tr>
             </tbody>
         </table>
         <button v-if="tableButton" @click="emitTableClicked">
-            <slot name="table-button">Voir</slot>
+            <slot name="table-button"></slot>
         </button>
     </div>
 </template>
@@ -46,9 +50,6 @@ export default {
         };
     },
     methods: {
-        emitItemClicked(item) {
-            this.$emit('itemClicked', item);
-        },
         emitTableClicked() {
             this.$emit('tableClicked', this.selectedItems);
         }
@@ -70,5 +71,13 @@ td {
 
 th {
     background-color: #f2f2f2;
+}
+
+.negative {
+    color: red;
+}
+
+.positive {
+    color: green;
 }
 </style>

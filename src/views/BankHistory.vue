@@ -16,7 +16,7 @@
         <DataTable :headers="headers" :items="filteredTransactions" itemCheck itemButton tableButton
             @itemClicked="showDetails" @tableClicked="showSelected">
             <template v-slot:item-button="{ item }">
-                <button @click="showDetails(item)">Détails</button>
+                <button @click="copyToClipboard(item.uuid)">Détails</button>
             </template>
             <template v-slot:table-button>
                 Voir
@@ -41,7 +41,8 @@ export default {
             endDate: null,
             headers: [
                 { label: 'Montant', name: 'amount' },
-                { label: 'Date', name: 'date' }
+                { label: 'Date', name: 'date' },
+                { label: 'Type', name: 'type' }
             ]
         };
     },
@@ -60,22 +61,27 @@ export default {
             return transactions.map(t => ({
                 amount: t.amount,
                 date: new Date(t.date.$date).toLocaleDateString(),
-                amountClass: t.amount < 0 ? 'negative' : 'positive',
+                type: t.amount < 0 ? 'S' : 'D',
                 uuid: t.uuid
             }));
         }
     },
     methods: {
-        async showDetails(item) {
-            try {
-                await navigator.clipboard.writeText(item.uuid);
-                alert(`UUID de la transaction : ${item.uuid}\n\nL'UUID a été copié dans le presse-papiers.`);
-            } catch (error) {
-                alert(`Erreur lors de la copie de l'UUID : ${error.message}`);
-            }
+        showDetails(item) {
+            alert(`Détails de la transaction : ${JSON.stringify(item)}`);
         },
         showSelected(items) {
-            alert(`Transactions sélectionnées : ${items.map(i => JSON.stringify(i)).join(', ')}`);
+            const uuids = items.map(item => item.uuid).join(', ');
+            alert(`UUID des transactions sélectionnées : ${uuids}`);
+        },
+        copyToClipboard(uuid) {
+            navigator.clipboard.writeText(uuid)
+                .then(() => {
+                    alert('UUID copié dans le presse-papiers : ' + uuid);
+                })
+                .catch(() => {
+                    alert('Erreur lors de la copie de l\'UUID');
+                });
         }
     }
 };
@@ -85,13 +91,5 @@ export default {
 label {
     display: block;
     margin: 10px 0;
-}
-
-.negative {
-    color: red;
-}
-
-.positive {
-    color: green;
 }
 </style>
