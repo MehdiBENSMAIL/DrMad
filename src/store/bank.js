@@ -13,7 +13,7 @@ export default {
             state.accountAmount = amount
         },
         updateAccountTransactions(state, transactions) {
-            state.accountTransactions  = transactions
+            state.accountTransactions = transactions
         },
         updateAccountNumberError(state, error) {
             state.accountNumberError = error
@@ -66,21 +66,24 @@ export default {
                 commit('createWithdrawError', -1)
             }
         },
-        async bankLogin({ commit }, data) {
+        async bankLogin({ commit, dispatch }, data) {
             console.log('handle login');
             const response = await BankService.bankLogin(data.login);
 
             if (response.error === 0) {
                 commit('updateAccount', response.data.account);
+                await dispatch('getAccountAmount', response.data.account.number);
+                await dispatch('getAccountTransactions', response.data.account.number);
             } else {
                 console.log(response.data);
             }
-
             return response;
         },
+
         async bankLogout({ commit }) {
             commit('updateAccount', null);
             commit('updateAccountAmount', 0);
+            commit('updateAccountTransactions', []);
         },
     },
     getters: { account: (state) => state.account, },

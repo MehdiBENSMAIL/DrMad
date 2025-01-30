@@ -21,13 +21,13 @@
                 </template>
             </router-view>
 
-            <NavBar :links="accountLink"/>
+            <NavBar :links="accountLink" />
         </div>
     </div>
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import { mapState } from 'vuex';
 import NavBar from '@/components/NavBar.vue';
 import VerticalMenu from '../components/VerticalMenu.vue';
 
@@ -40,22 +40,21 @@ export default {
     computed: {
         ...mapState('bank', ['account']),
         accountLink() {
-            return [ this.account
-                ? { label: "Déconnexion", to: "/bank/logout" }
-                : { label: "Mon compte", to: "/bank/account" }
-            ]
+            return [
+                this.account
+                    ? { label: "Déconnexion", to: "/bank/logout" }
+                    : { label: "Mon compte", to: "/bank/account" }
+            ];
         },
-    },
-    data() {
-        return {
-            itemsMenu: [
+        itemsMenu() {
+            return [
                 { type: "title", label: "Opérations" },
-                { type: "link", label: "Solde", to: "/bank/amount" },
-                { type: "link", label: "Débit/Virement", to: "/bank/operation" },
+                { type: "link", label: "Solde", to: "/bank/amount", disabled: !this.account },
+                { type: "link", label: "Débit/Virement", to: "/bank/operation", disabled: !this.account },
                 { type: "title", label: "États" },
-                { type: "link", label: "Historique", to: "/bank/history" }
-            ]
-        };
+                { type: "link", label: "Historique", to: "/bank/history", disabled: !this.account }
+            ];
+        }
     }
 }
 </script>
