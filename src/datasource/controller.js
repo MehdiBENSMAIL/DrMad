@@ -197,10 +197,10 @@ function getAccount(data) {
 }
 
 function getTransactions(data) {
-    let transactions = transactions.filter(e => e._id === data);
-    if (!transactions) { return errorResponse('Aucune transaction pour ce compte') }
+    const allTransactions = transactions.filter(e => e._id === data);
+    if (!allTransactions) { return errorResponse('Aucune transaction pour ce compte') }
 
-    return normalResponse({ transactions });
+    return normalResponse({ transactions: allTransactions });
 }
 
 function createWithdraw(data) {
@@ -222,7 +222,7 @@ function createWithdraw(data) {
     account.amount -= data.amount;
     transactions.push(transaction);
 
-    return normalResponse({ uuid: transaction.uuid, amount: account.amount })
+    return normalResponse({ transaction, amount: account.amount })
 }
 
 function createPayment(data) {
@@ -256,7 +256,7 @@ function createPayment(data) {
     receiverAccount.amount += data.amount;
     transactions.push([senderTransaction, receiverTransaction]);
 
-    return normalResponse({ uuid: receiverTransaction.uuid, amount: receiverAccount.amount })
+    return normalResponse({ transaction: senderTransaction, amount: receiverAccount.amount })
 }
 
 export default {

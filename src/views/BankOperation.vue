@@ -57,16 +57,13 @@ export default {
                          alert('Adresse de compte non valide');
                          return;
                     }
-                    res = await this.createPayment({
-                      amount: this.amount,
-                      destinationAccount: this.destAcc,
-                    })
+                    res = await this.createPayment({amount: this.amount, destinationAccount: this.destAcc})
                 } else {
-                  res = await this.createWithdraw({amount: this.amount})
+                    res = await this.createWithdraw({amount: this.amount})
                 }
 
                 if (res.error === 0) {
-                    this.message = `L'opération est validée avec le n° : ${res.data.uuid}. Vous pouvez la retrouver dans l'historique.`;
+                    this.message = `L'opération est validée avec le n° : ${res.data.transaction.uuid}. Vous pouvez la retrouver dans l'historique.`;
                     setTimeout(() => {
                         this.message = undefined;
                     }, 5000);
