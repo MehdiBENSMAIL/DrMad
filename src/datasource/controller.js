@@ -164,6 +164,7 @@ function finaliseOrder(data) {
     if (order.status !== 'waiting_payment')
         return errorResponse('La commande n\'est pas en attente de payement')
 
+    // TODO : rajouter l'uuid de transaction !
     let transaction = transactions.find(e => e._id === data.transactionId)
     if (!transaction) return errorResponse('La transaction n\'existe pas')
     if (transaction.amount >= 0) return errorResponse('La transaction amout >= 0')
