@@ -57,7 +57,7 @@ export default {
         },
         async createWithdraw({ commit, state }, data) {
             console.log('create withdraw');
-            let response = await BankService.createWithdraw(data);
+            let response = await BankService.createWithdraw({...data, accountId: state.account._id});
             if (response.error === 0) {
                 commit('updateAccountTransactions', [...state.accountTransactions, response.data.transaction]);
                 commit('updateAccountAmount', response.data.amount); // Nouveau solde
@@ -65,10 +65,11 @@ export default {
                 console.log(response.data);
                 commit('updateAccountNumberError', -1);
             }
+            return response;
         },
         async createPayment({ commit, state }, data) {
             console.log('create Payment');
-            let response = await BankService.createPayment(data);
+            let response = await BankService.createPayment({...data, accountId: state.account._id});
             if (response.error === 0) {
                 commit('updateAccountTransactions', [...state.accountTransactions, ...response.data.transactions]);
                 commit('updateAccountAmount', response.data.amount); // Nouveau solde

@@ -20,8 +20,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { bankaccounts } from "../datasource/data";
+import {mapActions, mapState} from 'vuex';
 
 export default {
     name: 'BankOperation',
@@ -30,7 +29,7 @@ export default {
             amount: 0,
             destAcc: "",
             dest: false,
-            message: ""
+            message: undefined,
         };
     },
     computed: {
@@ -39,6 +38,7 @@ export default {
         }),
     },
     methods: {
+        ...mapActions('bank', ['createWithdraw', 'createPayment']),
         async validate() {
             if (!this.bankAccount) {
                 alert("Vous devez être connecté pour effectuer cette opération.");
@@ -53,31 +53,22 @@ export default {
 
                 let res;
                 if (this.dest) {
-                    const destAcc = bankaccounts.find(e => e.number === this.destAcc);
-                    if (!destAcc) {
-                        alert('Compte non trouvé');
-                        return;
+                    if (!this.destAcc) {
+                         alert('Adresse de compte non valide');
+                         return;
                     }
-                    res = await this.$store.dispatch('bank/createPayment', {
-                        amount: this.amount,
-                        destAcc: destAcc._id,
-                        number: this.bankAccount.number
-                    });
+                    res = await this.createPayment({
+                      amount: this.amount,
+                      destinationAccount: this.destAcc,
+                    })
                 } else {
-                    res = await this.$store.dispatch('bank/createWithdraw', {
-                        number: this.bankAccount.number,
-                        amount: this.amount
-                    });
-                }
-
-                if (!res) {
-                    throw new Error("Aucune réponse reçue du serveur");
+                  res = await this.createWithdraw({amount: this.amount})
                 }
 
                 if (res.error === 0) {
                     this.message = `L'opération est validée avec le n° : ${res.data.uuid}. Vous pouvez la retrouver dans l'historique.`;
                     setTimeout(() => {
-                        this.message = '';
+                        this.message = undefined;
                     }, 5000);
                 } else {
                     alert(`Erreur: ${res.data}`);

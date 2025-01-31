@@ -7,86 +7,86 @@ async function bankLoginFromLocalSource(data) {
     return LocalSource.bankLogin(data)
 }
 
-async function getAccountAmountFromLocalSource(number) {
-    return LocalSource.getAccountAmount(number)
+async function getAccountAmountFromLocalSource(data) {
+    return LocalSource.getAccountAmount(data)
 }
 
-async function getAccountTransactionsFromLocalSource(number) {
-    return LocalSource.getAccountTransactions(number)
+async function getAccountTransactionsFromLocalSource(data) {
+    return LocalSource.getAccountTransactions(data)
 }
 
-async function getAccountFromLocalSource(number) {
-    return LocalSource.getAccount(number);
+async function getAccountFromLocalSource(data) {
+    return LocalSource.getAccount(data);
 }
 
-async function getTransactionsFromLocalSource(number) {
-    return LocalSource.getTransactions(number);
+async function getTransactionsFromLocalSource(data) {
+    return LocalSource.getTransactions(data);
 }
 
-async function createWithdrawFromLocalSource(number) {
-    return LocalSource.createWithdraw(number);
+async function createWithdrawFromLocalSource(data) {
+    return LocalSource.createWithdraw(data);
 }
 
-async function createPaymentFromLocalSource(number) {
-    return LocalSource.createPayment(number);
+async function createPaymentFromLocalSource(data) {
+    return LocalSource.createPayment(data);
 }
 
 // Fonctions principales
 
-async function getAccountAmount(number) {
+async function getAccountAmount(data) {
     let response;
     try {
-        response = await getAccountAmountFromLocalSource(number)
+        response = await getAccountAmountFromLocalSource(data)
     } catch (err) {
         response = errorResponse('erreur réseau, impossible de se loguer')
     }
     return response
 }
 
-async function getAccountTransactions(number) {
+async function getAccountTransactions(data) {
     let response;
     try {
-        response = await getAccountTransactionsFromLocalSource(number)
+        response = await getAccountTransactionsFromLocalSource(data)
     } catch (err) {
         response = errorResponse('erreur réseau, impossible de se loguer')
     }
     return response
 }
 
-async function getAccount(number) {
+async function getAccount(data) {
     let response
     try {
-        response = await getAccountFromLocalSource(number);
+        response = await getAccountFromLocalSource(data);
     } catch (err) {
         response = errorResponse('erreur réseau, impossible de récupérer le compte.');
     }
     return response;
 }
 
-async function getTransactions(number) {
+async function getTransactions(data) {
     let response
     try {
-        response = await getTransactionsFromLocalSource(number);
+        response = await getTransactionsFromLocalSource(data);
     } catch (err) {
         response = errorResponse('erreur réseau, impossible de récupérer les transactions.');
     }
     return response;
 }
 
-async function createWithdraw(number) {
+async function createWithdraw(data) {
     let response
     try {
-        response = await createWithdrawFromLocalSource(number);
+        response = await createWithdrawFromLocalSource(data);
     } catch (err) {
         response = errorResponse('erreur réseau, impossible de créer une transaction.');
     }
     return response;
 }
 
-async function createPayment(number) {
+async function createPayment(data) {
     let response
     try {
-        response = await createPaymentFromLocalSource(number);
+        response = await createPaymentFromLocalSource(data);
     } catch (err) {
         response = errorResponse('erreur réseau, impossible d\'effectuer un payement.');
     }

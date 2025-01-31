@@ -204,7 +204,7 @@ function getTransactions(data) {
 }
 
 function createWithdraw(data) {
-    let account = bankaccounts.find(e => e._id === data.idAccount);
+    let account = bankaccounts.find(e => e._id === data.accountId);
     if (!account) { return errorResponse('id de compte invalide') }
 
     if (data.amount <= 0 || data.amount > account.amount) {
@@ -226,8 +226,8 @@ function createWithdraw(data) {
 }
 
 function createPayment(data) {
-    let senderAccount = bankaccounts.find(e => e._id === data.idAccount)
-    let receiverAccount = bankaccounts.find(e => e.number === data.destNumber)
+    const senderAccount = bankaccounts.find(e => e._id === data.accountId)
+    const receiverAccount = bankaccounts.find(e => e.number === data.destinationAccount);
 
     if (!senderAccount || !receiverAccount) { return errorResponse('id/numéro de compte invalide') }
 
@@ -235,7 +235,7 @@ function createPayment(data) {
         return errorResponse('Montant invalide/solde insuffisant.')
     }
 
-    let senderTransaction = {
+    const senderTransaction = {
         "_id": uuidv4(),
         "amount": -data.amount,
         "destination": receiverAccount._id,
@@ -244,7 +244,7 @@ function createPayment(data) {
         "uuid": uuidv4()
     }
 
-    let receiverTransaction = {
+    const receiverTransaction = {
         "_id": uuidv4(),
         "amount": data.amount,
         "account": receiverAccount._id,
