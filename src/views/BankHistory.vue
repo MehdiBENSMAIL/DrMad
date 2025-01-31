@@ -58,6 +58,8 @@ export default {
                     transactions = transactions.filter(t => new Date(t.date.$date) <= new Date(this.endDate));
                 }
             }
+
+            transactions.sort((a, b) => new Date(b.date.$date) - new Date(a.date.$date));
             return transactions.map(t => ({
                 amount: t.amount,
                 date: new Date(t.date.$date).toLocaleDateString(),
