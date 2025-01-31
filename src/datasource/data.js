@@ -152,14 +152,6 @@ let transactions = [
         "uuid": "99990000-0000-0000-0000-000000000001"
     },
     {
-        "_id": "64762dc9066dd654632aef59",
-        "amount": -80000,
-        "account": "64762dc9066dd654632aed56",
-        "destination": "66d58122c08b4d64db14cd04",
-        "date": {"$date": "2023-05-30T17:09:29.199Z"},
-        "uuid": "99990000-0000-0000-0000-000000000001"
-    },
-    {
         "_id": "64762dc9066dd654632aed5b",
         "amount": 75000,
         "account": "64762dc9066dd654632aed56",
@@ -197,7 +189,6 @@ let auctionusers = [
         "account": "FRBADORG78901234567890-0000002"
     },
 ]
-
 let auctionrequests = [
     {
         "_id": "64762dc9066dd654632aed72",
