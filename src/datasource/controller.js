@@ -164,12 +164,11 @@ function finaliseOrder(data) {
     if (order.status !== 'waiting_payment')
         return errorResponse('La commande n\'est pas en attente de payement')
 
-    // TODO : rajouter l'uuid de transaction !
-    let transaction = transactions.find(e => e._id === data.transactionId)
+    let transaction = transactions.find(e => e.uuid === data.transactionId)
     if (!transaction) return errorResponse('La transaction n\'existe pas')
-    if (transaction.amount >= 0) return errorResponse('La transaction amout >= 0')
-    if (-transaction.amount < order.total) return errorResponse('Le prix de la commande est trop élevé')
-    if (transaction.destination !== data.userId) return errorResponse('Cette transaction n\'est pas associé à ce compte')
+    if (transaction.amount >= 0) return errorResponse('La amout de la transaction est suppérieur ou égale à 0')
+    if(!transaction.destination || transaction.destination !== '65d721c44399ae9c8321832c') return errorResponse('L\'ID de transaction ne correspond pas à la banque')
+    if (order.total > -transaction.amount) return errorResponse('Le prix de la commande est trop élevé')
 
     order.status = 'finalized'
     return normalResponse()
@@ -255,7 +254,9 @@ function createPayment(data) {
 
     senderAccount.amount -= data.amount;
     receiverAccount.amount += data.amount;
-    transactions.push([senderTransaction, receiverTransaction]);
+
+    transactions.push(senderTransaction);
+    transactions.push(receiverTransaction);
 
     return normalResponse({ transaction: senderTransaction, amount: receiverAccount.amount })
 }
