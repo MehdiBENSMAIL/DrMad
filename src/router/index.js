@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import ShopView from '../views/ShopView.vue'
 import BankView from '../views/BankView.vue'
 import {routeControllers} from "@/router/controllers.router";
+import AppHome from "@/views/AppHome.vue";
 
 Vue.use(VueRouter)
 
@@ -100,6 +101,11 @@ const routes = [
                 }
             }
         ]
+    },
+    {
+        path: '/',
+        component: AppHome,
+        alias: '/home',
     }
 ];
 
